@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>dotnet-sigspec</AssemblyName>
+    <RootNamespace>SigSpec</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
+    <ProjectReference Include="..\HelloSignalR\HelloSignalR.csproj" />
+    <ProjectReference Include="..\SigSpec.CodeGeneration.TypeScript\SigSpec.CodeGeneration.TypeScript.csproj" />
+  </ItemGroup>
+
+</Project>
