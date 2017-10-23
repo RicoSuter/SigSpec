@@ -23,7 +23,7 @@ namespace SigSpec
             // TODO: Add PR to SignlaR Core with new IHubDescriptionCollectionProvider service
             var document = await generator.GenerateForHubsAsync(new Dictionary<string, Type>
             {
-                { "/chat", typeof(ChatHub) }
+                { "chat", typeof(ChatHub) }
             });
 
             var json = document.ToJson();
