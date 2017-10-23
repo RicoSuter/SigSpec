@@ -53,7 +53,7 @@ Generated spec:
 ```
 {
   "hubs": {
-    "/chat": {
+    "chat": {
       "name": "Chat",
       "description": "",
       "operations": {
