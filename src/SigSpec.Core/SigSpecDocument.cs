@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NJsonSchema;
+using NJsonSchema.Converters;
 using System.Collections.Generic;
 
 namespace SigSpec.Core
