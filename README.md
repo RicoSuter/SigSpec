@@ -8,6 +8,8 @@ Run SigSpec.Console to see a demo spec and the generated TypeScript code.
 
 Based on [NJsonSchema](http://njsonschema.org) (see also: [NSwag](http://nswag.org)).
 
+Original idea: https://github.com/RSuter/NSwag/issues/691
+
 ## Sample
 
 Hub: 
