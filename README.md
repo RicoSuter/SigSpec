@@ -14,7 +14,7 @@ Original idea: https://github.com/RSuter/NSwag/issues/691
 
 Hub: 
 
-```
+```csharp
 public class ChatHub : Hub<IChatClient>
 {
     public Task Send(string message)
@@ -52,7 +52,7 @@ public interface IChatClient
 
 Generated spec: 
 
-```
+```json
 {
   "hubs": {
     "chat": {
@@ -133,7 +133,7 @@ Generated spec:
 
 Generated TypeScript code: 
 
-```
+```typescript
 export class ChatHub {
     ChatHub(private connection: any) {
     }
