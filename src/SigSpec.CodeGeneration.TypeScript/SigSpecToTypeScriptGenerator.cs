@@ -29,10 +29,18 @@ namespace SigSpec.CodeGeneration.TypeScript
                 artifacts.Add(new CodeArtifact(hubModel.Name, CodeArtifactType.Class, CodeArtifactLanguage.TypeScript, template));
             }
 
-            var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
-            var types = generator.GenerateTypes();
+            if (_settings.GenerateDtoTypes)
+            {
+                var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
+                var types = generator.GenerateTypes();
 
-            return new CodeArtifactCollection(artifacts.Concat(types.Artifacts), types.ExtensionCode);
+                return new CodeArtifactCollection(artifacts.Concat(types.Artifacts), types.ExtensionCode);
+            }
+            else
+            {
+                var extensionCode = new TypeScriptExtensionCode(_settings.TypeScriptGeneratorSettings.ExtensionCode, _settings.TypeScriptGeneratorSettings.ExtendedClasses);
+                return new CodeArtifactCollection(artifacts, extensionCode);
+            }
         }
 
         public string GenerateFile(SigSpecDocument document)

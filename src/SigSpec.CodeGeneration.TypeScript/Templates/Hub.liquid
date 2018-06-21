@@ -8,13 +8,7 @@
     }
 
 {% endfor -%}
-}
-
-export class {{ Name }}HubRegistration {
-    {{ Name }}HubRegistration(private connection: any) {
-    }
-
-    register(implementation: I{{ Name }}HubCallbacks) {
+    registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
         this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
 {% endfor -%}

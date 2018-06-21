@@ -2,13 +2,11 @@
 
 namespace SigSpec.CodeGeneration
 {
-    public class SigSpecToTypeScriptGeneratorSettingsBase
+    public class SigSpecToTypeScriptGeneratorSettingsBase : ClientGeneratorBaseSettings
     {
         public SigSpecToTypeScriptGeneratorSettingsBase(CodeGeneratorSettingsBase codeGeneratorSettings)
         {
             CodeGeneratorSettings = codeGeneratorSettings;
-            CodeGeneratorSettings.UseLiquidTemplates = true;
-            CodeGeneratorSettings.TemplateFactory = new DefaultTemplateFactory(codeGeneratorSettings);
         }
 
         protected CodeGeneratorSettingsBase CodeGeneratorSettings { get; }

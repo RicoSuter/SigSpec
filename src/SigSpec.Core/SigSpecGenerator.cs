@@ -71,7 +71,7 @@ namespace SigSpec.Core
 
             foreach (var arg in method.GetParameters())
             {
-                var parameter = await generator.GenerateWithReferenceAndNullability<SigSpecParameter>(
+                var parameter = await generator.GenerateWithReferenceAndNullabilityAsync<SigSpecParameter>(
                     arg.ParameterType, 
                     arg.GetCustomAttributes(), 
                     resolver, 
