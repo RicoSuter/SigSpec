@@ -146,13 +146,7 @@ export class ChatHub {
         this.connection.invoke('Foo', bar);
     }
 
-}
-
-export class ChatHubRegistration {
-    ChatHubRegistration(private connection: any) {
-    }
-
-    register(implementation: IChatHubCallbacks) {
+    registerCallbacks(implementation: IChatHubCallbacks) {
         this.connection.on('Welcome', () => implementation.welcome());
         this.connection.on('Send', (message) => implementation.send(message));
     }
