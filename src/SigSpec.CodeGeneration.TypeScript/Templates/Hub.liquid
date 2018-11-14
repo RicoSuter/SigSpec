@@ -1,6 +1,10 @@
-﻿export class {{ Name }}Hub {
-    {{ Name }}Hub(private connection: any) {
+﻿import { HubConnection, IStreamResult } from "@aspnet/signalr"
+
+export class {{ Name }}Hub {
+    constructor(private connection: HubConnection) {
     }
+
+    /* Operations */
 
 {% for operation in Operations -%}
     {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
@@ -8,6 +12,16 @@
     }
 
 {% endfor -%}
+    /* Channels */
+
+{% for channel in Channels -%}
+    {{ channel.MethodName }}({% for parameter in channel.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): IStreamResult<{{ channel.ReturnType.Type }}> {
+        return this.connection.stream('{{ channel.Name }}'{% for parameter in channel.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+
+{% endfor -%}
+    /* Callbacks */
+
     registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
         this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));

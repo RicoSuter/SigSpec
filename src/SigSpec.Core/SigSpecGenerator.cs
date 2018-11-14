@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace SigSpec.Core
@@ -49,6 +51,11 @@ namespace SigSpec.Core
                     }
                 }
 
+                foreach(var method in GetChannelMethods(type))
+                {
+                    hub.Channels[method.Name] = await GenerateChannelAsync(type, method, generator, resolver);
+                }
+
                 document.Hubs[h.Key] = hub;
             }
 
@@ -57,11 +64,28 @@ namespace SigSpec.Core
 
         private IEnumerable<MethodInfo> GetOperationMethods(Type type)
         {
-            return type.GetTypeInfo().GetRuntimeMethods().Where(m =>
-                m.IsPublic && 
-                m.IsSpecialName == false && 
-                m.DeclaringType != typeof(Hub) && 
-                m.DeclaringType != typeof(object));
+            return type.GetTypeInfo().GetRuntimeMethods().Where(m => {
+                var returnsChannelReader = m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>);
+                return
+                    m.IsPublic &&
+                    m.IsSpecialName == false &&
+                    m.DeclaringType != typeof(Hub) &&
+                    m.DeclaringType != typeof(object) &&
+                    returnsChannelReader == false;
+            });
+        }
+
+        private IEnumerable<MethodInfo> GetChannelMethods(Type type)
+        {
+            return type.GetTypeInfo().GetRuntimeMethods().Where(m => {
+                var returnsChannelReader = m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>);
+                return
+                    m.IsPublic &&
+                    m.IsSpecialName == false &&
+                    m.DeclaringType != typeof(Hub) &&
+                    m.DeclaringType != typeof(object) &&
+                    returnsChannelReader == true;
+            });
         }
 
         private async Task<SigSpecOperation> GenerateOperationAsync(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver)
@@ -84,6 +108,48 @@ namespace SigSpec.Core
             }
 
             return operation;
+        }
+
+        private async Task<SigSpecChannel> GenerateChannelAsync(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver)
+        {
+            var channel = new SigSpecChannel();
+            channel.Description = await type.GetXmlSummaryAsync();
+
+            foreach (var arg in method.GetParameters())
+            {
+                var parameter = await generator.GenerateWithReferenceAndNullabilityAsync<SigSpecParameter>(
+                    arg.ParameterType,
+                    arg.GetCustomAttributes(),
+                    resolver,
+                    async (p, s) =>
+                    {
+                        p.Description = await arg.GetXmlDocumentationAsync();
+                    });
+
+                channel.Parameters[arg.Name] = parameter;
+            }
+
+            //if (method.ReturnType.IsGenericType)
+            //{
+            //    //var t1 = method.ReturnType.GenericParameterAttributes;
+            //    //var t2 = method.ReturnType.GenericParameterPosition;
+            //    //var t3 = method.ReturnType.GenericTypeArguments;
+            //    var t4 = method.ReturnType.GetGenericArguments();
+            //    //var t5 = method.ReturnType.GetGenericParameterConstraints();
+            //    var t6 = method.ReturnType.GetGenericTypeArguments();
+            //    var t7 = method.ReturnType.GetGenericTypeDefinition();
+            //}
+
+            channel.ReturnType = await generator.GenerateWithReferenceAndNullabilityAsync<JsonSchema4>(
+                    method.ReturnType.GetGenericArguments().First(),
+                    null,
+                    resolver,
+                    async (p, s) =>
+                    {
+                        p.Description = await method.ReturnType.GetXmlSummaryAsync();
+                    });
+
+            return channel;
         }
     }
 }

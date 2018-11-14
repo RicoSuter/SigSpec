@@ -22,6 +22,8 @@ namespace SigSpec.CodeGeneration.Models
 
         public IEnumerable<OperationModel> Operations => _hub.Operations.Select(o => new OperationModel(o.Key, o.Value, _resolver));
 
+        public IEnumerable<ChannelModel> Channels => _hub.Channels.Select(o => new ChannelModel(o.Key, o.Value, _resolver));
+
         public IEnumerable<OperationModel> Callbacks => _hub.Callbacks.Select(o => new OperationModel(o.Key, o.Value, _resolver));
     }
 }
