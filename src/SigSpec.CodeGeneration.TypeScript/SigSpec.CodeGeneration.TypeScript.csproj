@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.10.72" />
-    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.10.72" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.12.1" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.12.1" />
   </ItemGroup>
 
   <ItemGroup>
