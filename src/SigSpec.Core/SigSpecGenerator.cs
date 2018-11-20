@@ -130,7 +130,7 @@ namespace SigSpec.Core
             }
 
             channel.ReturnType = await generator.GenerateWithReferenceAndNullabilityAsync<JsonSchema4>(
-                    method.ReturnType.GetGenericArguments().First(),
+                    method.ReturnType.GetGenericTypeArguments().First(),
                     null,
                     resolver,
                     async (p, s) =>
