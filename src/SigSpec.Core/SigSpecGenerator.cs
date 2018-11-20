@@ -129,19 +129,8 @@ namespace SigSpec.Core
                 channel.Parameters[arg.Name] = parameter;
             }
 
-            //if (method.ReturnType.IsGenericType)
-            //{
-            //    //var t1 = method.ReturnType.GenericParameterAttributes;
-            //    //var t2 = method.ReturnType.GenericParameterPosition;
-            //    //var t3 = method.ReturnType.GenericTypeArguments;
-            //    var t4 = method.ReturnType.GetGenericArguments();
-            //    //var t5 = method.ReturnType.GetGenericParameterConstraints();
-            //    var t6 = method.ReturnType.GetGenericTypeArguments();
-            //    var t7 = method.ReturnType.GetGenericTypeDefinition();
-            //}
-
             channel.ReturnType = await generator.GenerateWithReferenceAndNullabilityAsync<JsonSchema4>(
-                    method.ReturnType.GetGenericArguments().First(),
+                    method.ReturnType.GetGenericTypeArguments().First(),
                     null,
                     resolver,
                     async (p, s) =>
