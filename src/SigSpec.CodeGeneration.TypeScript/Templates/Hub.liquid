@@ -1,4 +1,5 @@
 ﻿import { HubConnection, IStreamResult } from "@aspnet/signalr"
+import moment from "moment" // TODO should check settings to decide of moment is used or not
 
 export class {{ Name }}Hub {
     constructor(private connection: HubConnection) {
