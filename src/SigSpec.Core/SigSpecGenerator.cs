@@ -36,16 +36,16 @@ namespace SigSpec.Core
                 {
                     var operation = await GenerateOperationAsync(type, method, generator, resolver);
                     hub.Operations[method.Name] = operation;
+                }
 
-                    var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
-                    if (baseTypeGenericArguments.Length == 1)
+                var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
+                if (baseTypeGenericArguments.Length == 1)
+                {
+                    var callbackType = baseTypeGenericArguments[0];
+                    foreach (var callbackMethod in GetOperationMethods(callbackType))
                     {
-                        var callbackType = baseTypeGenericArguments[0];
-                        foreach (var callbackMethod in GetOperationMethods(callbackType))
-                        {
-                            var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver);
-                            hub.Callbacks[callbackMethod.Name] = callback;
-                        }
+                        var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver);
+                        hub.Callbacks[callbackMethod.Name] = callback;
                     }
                 }
 
