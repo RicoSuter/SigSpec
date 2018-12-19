@@ -1,13 +1,25 @@
-﻿export class {{ Name }}Hub {
-    {{ Name }}Hub(private connection: any) {
-    }
+﻿import { HubConnection, IStreamResult } from "@aspnet/signalr"
 
+export class {{ Name }}Hub {
+    constructor(private connection: HubConnection) {
+    }
 {% for operation in Operations -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
-        this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
 
+{%     if operation.IsObservable -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): IStreamResult<{{ operation.ReturnType.Type }}> {
+        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     elseif operation.HasReturnType -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): Promise<{{ operation.ReturnType.Type }}> {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     else -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): Promise<void> {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     endif -%}
 {% endfor -%}
+
     registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
         this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));

@@ -12,5 +12,11 @@ namespace SigSpec.Core
 
         [JsonProperty("parameters")]
         public IDictionary<string, SigSpecParameter> Parameters { get; } = new Dictionary<string, SigSpecParameter>();
+
+        [JsonProperty("returntype", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema4 ReturnType { get; set; }
+
+        [JsonProperty("type", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public SigSpecOperationType Type { get; set; }
     }
 }
