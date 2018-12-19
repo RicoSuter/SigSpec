@@ -38,22 +38,22 @@ namespace SigSpec.Core
                 {
                     var operation = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Sync);
                     hub.Operations[method.Name] = operation;
-
-                    var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
-                    if (baseTypeGenericArguments.Length == 1)
-                    {
-                        var callbackType = baseTypeGenericArguments[0];
-                        foreach (var callbackMethod in GetOperationMethods(callbackType))
-                        {
-                            var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
-                            hub.Callbacks[callbackMethod.Name] = callback;
-                        }
-                    }
                 }
 
                 foreach (var method in GetChannelMethods(type))
                 {
                     hub.Operations[method.Name] = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Observable);
+                }
+
+                var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
+                if (baseTypeGenericArguments.Length == 1)
+                {
+                    var callbackType = baseTypeGenericArguments[0];
+                    foreach (var callbackMethod in GetOperationMethods(callbackType))
+                    {
+                        var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
+                        hub.Callbacks[callbackMethod.Name] = callback;
+                    }
                 }
 
                 document.Hubs[h.Key] = hub;
