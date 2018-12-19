@@ -1,3 +1,4 @@
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -16,13 +17,25 @@ namespace HelloSignalR
             return Clients.All.Send(message);
         }
 
-        public Task Foo(Bar bar)
+        public Task AddPerson(Person person)
         {
             return Task.CompletedTask;
         }
+
+        public ChannelReader<Event> GetEvents()
+        {
+            var channel = Channel.CreateUnbounded<Event>();
+            // TODO: Write events
+            return channel.Reader;
+        }
     }
 
-    public class Bar
+    public class Event
+    {
+        public string Type { get; set; }
+    }
+
+    public class Person
     {
         [JsonProperty("firstName")]
         public string FirstName { get; set; }

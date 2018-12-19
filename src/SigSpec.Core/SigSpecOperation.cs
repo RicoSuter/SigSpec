@@ -17,6 +17,6 @@ namespace SigSpec.Core
         public JsonSchema4 ReturnType { get; set; }
 
         [JsonProperty("type", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public OperationType Type { get; set; }
+        public SigSpecOperationType Type { get; set; }
     }
 }

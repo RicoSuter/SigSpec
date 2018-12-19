@@ -8,28 +8,27 @@ namespace SigSpec.CodeGeneration.Models
 {
     public class OperationModel
     {
-        private readonly string _name;
         private readonly SigSpecOperation _operation;
-        private readonly TypeResolverBase _resolver;
-        private readonly ReturnTypeModel _returnType;
 
         public OperationModel(string name, SigSpecOperation operation, TypeResolverBase resolver)
         {
-            _name = name;
             _operation = operation;
-            _resolver = resolver;
-            _returnType = operation.ReturnType == null ? null : new ReturnTypeModel("", _operation.ReturnType, _resolver);
+
+            Name = name;
+            ReturnType = operation.ReturnType != null ? new ReturnTypeModel(_operation.ReturnType, resolver) : null;
+            Parameters = operation.Parameters.Select(o => new ParameterModel(o.Key, o.Value, resolver));
         }
 
-        public string Name => _name;
+        public string Name { get; }
 
-        public string MethodName => ConversionUtilities.ConvertToLowerCamelCase(_name, true);
+        public string MethodName => ConversionUtilities.ConvertToLowerCamelCase(Name, true);
 
-        public IEnumerable<ParameterModel> Parameters => _operation.Parameters.Select(o => new ParameterModel(o.Key, o.Value, _resolver));
+        public IEnumerable<ParameterModel> Parameters { get; }
 
-        public ReturnTypeModel ReturnType => _returnType;
+        public ReturnTypeModel ReturnType { get; }
 
-        public bool IsObservable => _operation.Type == OperationType.Observable;
-        public bool HasReturnType => _returnType != null;
+        public bool IsObservable => _operation.Type == SigSpecOperationType.Observable;
+
+        public bool HasReturnType => ReturnType != null;
     }
 }

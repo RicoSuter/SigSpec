@@ -27,13 +27,24 @@ public class ChatHub : Hub<IChatClient>
         return Clients.All.Send(message);
     }
 
-    public Task Foo(Bar bar)
+    public Task AddPerson(Person person)
     {
         return Task.CompletedTask;
     }
+
+    public ChannelReader<Event> GetEvents()
+    {
+        var channel = Channel.CreateUnbounded<Event>();
+        return channel.Reader;
+    }
 }
 
-public class Bar
+public class Event
+{
+    public string Type { get; set; }
+}
+
+public class Person
 {
     [JsonProperty("firstName")]
     public string FirstName { get; set; }
@@ -71,21 +82,37 @@ Generated spec:
             }
           }
         },
-        "Foo": {
+        "AddPerson": {
           "description": "",
           "parameters": {
-            "bar": {
+            "person": {
               "description": "",
               "oneOf": [
                 {
                   "type": "null"
                 },
                 {
-                  "$ref": "#/definitions/Bar"
+                  "$ref": "#/definitions/Person"
                 }
               ]
             }
           }
+        },
+        "GetEvents": {
+          "description": "",
+          "parameters": {},
+          "returntype": {
+            "description": "",
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/definitions/Event"
+              }
+            ]
+          },
+          "type": "Observable"
         }
       },
       "callbacks": {
@@ -109,7 +136,7 @@ Generated spec:
     }
   },
   "definitions": {
-    "Bar": {
+    "Person": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -126,6 +153,18 @@ Generated spec:
           ]
         }
       }
+    },
+    "Event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     }
   }
 }
@@ -134,16 +173,22 @@ Generated spec:
 Generated TypeScript code: 
 
 ```typescript
+import { HubConnection, IStreamResult } from "@aspnet/signalr"
+
 export class ChatHub {
-    ChatHub(private connection: any) {
+    constructor(private connection: HubConnection) {
     }
 
-    send(message: string) {
-        this.connection.invoke('Send', message);
+    send(message: string): Promise<void> {
+        return this.connection.invoke('Send', message);
     }
 
-    foo(bar: Bar) {
-        this.connection.invoke('Foo', bar);
+    addPerson(person: Person): Promise<void> {
+        return this.connection.invoke('AddPerson', person);
+    }
+
+    getEvents(): IStreamResult<Event> {
+        return this.connection.stream('GetEvents');
     }
 
     registerCallbacks(implementation: IChatHubCallbacks) {
@@ -157,8 +202,12 @@ export interface IChatHubCallbacks {
     send(message: string);
 }
 
-export interface Bar {
+export interface Person {
     firstName: string;
     lastName: string;
+}
+
+export interface Event {
+    Type: string;
 }
 ```

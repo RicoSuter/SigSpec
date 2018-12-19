@@ -20,7 +20,7 @@ namespace SigSpec
             var settings = new SigSpecGeneratorSettings();
             var generator = new SigSpecGenerator(settings);
 
-            // TODO: Add PR to SignlaR Core with new IHubDescriptionCollectionProvider service
+            // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
             var document = await generator.GenerateForHubsAsync(new Dictionary<string, Type>
             {
                 { "chat", typeof(ChatHub) }
