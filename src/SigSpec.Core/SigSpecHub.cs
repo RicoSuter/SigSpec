@@ -15,9 +15,6 @@ namespace SigSpec.Core
         [JsonProperty("operations")]
         public IDictionary<string, SigSpecOperation> Operations { get; } = new Dictionary<string, SigSpecOperation>();
 
-        [JsonProperty("channels")]
-        public IDictionary<string, SigSpecChannel> Channels { get; } = new Dictionary<string, SigSpecChannel>();
-
         [JsonProperty("callbacks")]
         public IDictionary<string, SigSpecOperation> Callbacks { get; } = new Dictionary<string, SigSpecOperation>();
     }
