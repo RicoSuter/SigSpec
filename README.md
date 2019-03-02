@@ -1,6 +1,6 @@
 # SigSpec for SignalR Core
 
-**Experimental specification** and code generator for [SignalR Core](https://github.com/aspnet/SignalR).
+**Experimental API endpoint specification** and code generator for [SignalR Core](https://github.com/aspnet/SignalR).
 
 Run SigSpec.Console to see a demo spec and the generated TypeScript code.
 
