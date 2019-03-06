@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="Templates\Hub.liquid" />
+    <None Remove="Templates\HubImports.liquid" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Templates\HubImports.liquid" />
     <EmbeddedResource Include="Templates\Hub.liquid" />
   </ItemGroup>
 

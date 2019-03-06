@@ -22,6 +22,10 @@ namespace SigSpec.CodeGeneration.TypeScript
             resolver.RegisterSchemaDefinitions(document.Definitions);
 
             var artifacts = new List<CodeArtifact>();
+
+            var importsTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "HubImports", null);
+            artifacts.Add(new CodeArtifact("imports", CodeArtifactType.Undefined, CodeArtifactLanguage.TypeScript, importsTemplate));
+
             foreach (var hub in document.Hubs)
             {
                 var hubModel = new HubModel(hub.Key, hub.Value, resolver);
