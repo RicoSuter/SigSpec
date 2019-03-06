@@ -1,6 +1,7 @@
 ﻿using NJsonSchema.CodeGeneration;
 using NJsonSchema.CodeGeneration.TypeScript;
 using SigSpec.CodeGeneration.Models;
+using SigSpec.CodeGeneration.TypeScript.Models;
 using SigSpec.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,6 @@ namespace SigSpec.CodeGeneration.TypeScript
             resolver.RegisterSchemaDefinitions(document.Definitions);
 
             var artifacts = new List<CodeArtifact>();
-
-            var importsTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "HubImports", null);
-            artifacts.Add(new CodeArtifact("imports", CodeArtifactType.Undefined, CodeArtifactLanguage.TypeScript, importsTemplate));
-
             foreach (var hub in document.Hubs)
             {
                 var hubModel = new HubModel(hub.Key, hub.Value, resolver);
@@ -50,7 +47,11 @@ namespace SigSpec.CodeGeneration.TypeScript
         public string GenerateFile(SigSpecDocument document)
         {
             var artifacts = GenerateArtifacts(document);
-            return artifacts.Concatenate();
+
+            var fileModel = new FileModel(artifacts.Artifacts.Select(a => a.Code));
+            var fileTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "File", fileModel);
+
+            return fileTemplate.Render();
         }
     }
 }
