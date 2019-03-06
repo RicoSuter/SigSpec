@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NJsonSchema" Version="9.10.72" />
+    <PackageReference Include="NJsonSchema" Version="9.13.22" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.3" />
   </ItemGroup>
 
