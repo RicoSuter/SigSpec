@@ -1,48 +1,75 @@
 ﻿let _cx;
-{% for operation in All -%}
+
+{% for operation in Callbacks -%}
 export const {{ operation.NameConstCase }} = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}';
 {% endfor -%}
 {% for operation in Operations -%}
-{%     if operation.IsObservable -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})> {
-        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     elseif operation.HasReturnType -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     else -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     endif -%}
+export const {{ operation.NameConstCase }}_REQUEST = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_REQUEST';
+export const {{ operation.NameConstCase }}_RESPONSE = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_RESPONSE';
+export const {{ operation.NameConstCase }}_ERROR = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_ERROR';
+{%   if operation.IsObservable -%}
+export const {{ operation.NameConstCase }}_STREAM_NEXT = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_STREAM_NEXT';
+export const {{ operation.NameConstCase }}_STREAM_COMPLETE = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_STREAM_COMPLETE';
+export const {{ operation.NameConstCase }}_STREAM_ERROR = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}_STREAM_ERROR';
+{%   endif -%}
 {% endfor -%}
 
 {% for operation in Callbacks -%}
-{%     if operation.IsObservable -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})> {
-        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     elseif operation.HasReturnType -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     else -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     endif -%}
-{% endfor -%}
-
-
-    registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
-{% for operation in Callbacks -%}
-        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
-{% endfor -%}
-    }
+export function {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+  return {type: {{ operation.NameConstCase }}{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}};
 }
-
-export interface I{{ Name }}HubCallbacks {
-{% for operation in Callbacks -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %});
 {% endfor -%}
+
+{% for operation in Operations -%}
+{%   if operation.IsObservable -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})> {
+        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%   else -%}
+export function {{ operation.MethodName }}Request({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+  return {type: {{ operation.NameConstCase }}_REQUEST{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}};
+}
+export function {{ operation.MethodName }}Response({% if operation.HasReturnType %}response{% endif %}) {
+  return {type: {{ operation.NameConstCase }}_RESPONSE{% if operation.HasReturnType %}, response{% endif %}};
+}
+export function {{ operation.MethodName }}Error(error) {
+  return {type: {{ operation.NameConstCase }}_ERROR, error};
+}
+export function {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+  return (dispatch) => {
+    const bound = {
+      {{ operation.MethodName }}Request: ({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => dispatch({{ operation.MethodName }}Request({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %})),
+      {{ operation.MethodName }}Response: ({% if operation.HasReturnType %}response{% endif %}) => dispatch({{ operation.MethodName }}Response({% if operation.HasReturnType %}response{% endif %})),
+      {{ operation.MethodName }}Error: (error) => dispatch({{ operation.MethodName }}Error(error))
+    };
+    bound.{{ operation.MethodName }}Request({% for parameter in operation.Parameters %}{{ parameter.NameCamelCase }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+    return _cx.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %})
+      .then(bound.{{ operation.MethodName }}Response)
+      .catch(bound.{{ operation.MethodName }}Error);
+  };
+}
+{%   endif -%}
+{% endfor -%}
+
+
+export default function init(dispatch) {
+  _cx = new signalR.HubConnectionBuilder()
+      .configureLogging(signalR.LogLevel.Warning)
+      .withUrl('/{{Path}}')
+      .build();
+
+    async function restart() {
+      try {
+        await _cx.start();
+        dispatch(started());
+      } catch(err) {
+        dispatch(errored(err));
+        setTimeout(() => restart(), 5000);
+      }
+    }
+    _cx.onclose(async () => await restart());
+
+{% for operation in Callbacks -%}
+    _cx.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => dispatch({{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+{% endfor -%}
+}

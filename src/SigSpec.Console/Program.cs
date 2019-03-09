@@ -27,17 +27,16 @@ namespace SigSpec
                 { "progress", typeof(ProgressHub) }
             });
 
-            var json = document.ToJson();
-
-            Console.WriteLine("\nGenerated SigSpec document:");
-            Console.WriteLine(json);
-            Console.ReadKey();
+            //var json = document.ToJson();
+            //Console.WriteLine("\nGenerated SigSpec document:");
+            //Console.WriteLine(json);
+            //Console.ReadKey();
 
             var codeGeneratorSettings = new SigSpecToJavaScriptGeneratorSettings();
             var codeGenerator = new SigSpecToJavaScriptGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateFile(document);
 
-            Console.WriteLine("\n\nGenerated SigSpec JavaScript code:");
+            Console.WriteLine("Generated SigSpec JavaScript code:\n\n");
             Console.WriteLine(file);
             Console.ReadKey();
         }
