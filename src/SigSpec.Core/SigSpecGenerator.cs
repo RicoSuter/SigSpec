@@ -62,6 +62,7 @@ namespace SigSpec.Core
             return document;
         }
 
+        private static IEnumerable<string> _forbiddenOperations { get; } = typeof(Hub).GetRuntimeMethods().Concat(typeof(Hub<>).GetRuntimeMethods()).Select(x => x.Name).Distinct();
         private IEnumerable<MethodInfo> GetOperationMethods(Type type)
         {
             return type.GetTypeInfo().GetRuntimeMethods().Where(m =>
@@ -71,7 +72,9 @@ namespace SigSpec.Core
                     m.IsPublic &&
                     m.IsSpecialName == false &&
                     m.DeclaringType != typeof(Hub) &&
+                    m.DeclaringType != typeof(Hub<>) &&
                     m.DeclaringType != typeof(object) &&
+                    !_forbiddenOperations.Contains(m.Name) && 
                     returnsChannelReader == false;
             });
         }
@@ -85,7 +88,9 @@ namespace SigSpec.Core
                     m.IsPublic &&
                     m.IsSpecialName == false &&
                     m.DeclaringType != typeof(Hub) &&
+                    m.DeclaringType != typeof(Hub<>) &&
                     m.DeclaringType != typeof(object) &&
+                    !_forbiddenOperations.Contains(m.Name) && 
                     returnsChannelReader == true;
             });
         }
