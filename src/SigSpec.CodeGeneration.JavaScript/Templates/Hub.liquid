@@ -1,0 +1,48 @@
+﻿let _cx;
+{% for operation in All -%}
+export const {{ operation.NameConstCase }} = '{{ NameConstCase }}_HUB::{{ operation.NameConstCase }}';
+{% endfor -%}
+{% for operation in Operations -%}
+{%     if operation.IsObservable -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})> {
+        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     elseif operation.HasReturnType -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     else -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     endif -%}
+{% endfor -%}
+
+{% for operation in Callbacks -%}
+{%     if operation.IsObservable -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})> {
+        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     elseif operation.HasReturnType -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     else -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) {
+        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+    }
+{%     endif -%}
+{% endfor -%}
+
+
+    registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
+{% for operation in Callbacks -%}
+        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+{% endfor -%}
+    }
+}
+
+export interface I{{ Name }}HubCallbacks {
+{% for operation in Callbacks -%}
+    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+{% endfor -%}

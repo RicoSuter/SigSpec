@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\File.liquid" />
+    <None Remove="Templates\Hub.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\File.liquid" />
+    <EmbeddedResource Include="Templates\Hub.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.22" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
+    <ProjectReference Include="..\SigSpec.CodeGeneration\SigSpec.CodeGeneration.csproj" />
+  </ItemGroup>
+
+</Project>

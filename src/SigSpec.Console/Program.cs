@@ -1,9 +1,10 @@
 ﻿using HelloSignalR;
-using SigSpec.CodeGeneration.TypeScript;
+using SigSpec.CodeGeneration.JavaScript;
 using SigSpec.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BoldGroup.Progress;
 
 namespace SigSpec
 {
@@ -23,7 +24,7 @@ namespace SigSpec
             // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
             var document = await generator.GenerateForHubsAsync(new Dictionary<string, Type>
             {
-                { "chat", typeof(ChatHub) }
+                { "progress", typeof(ProgressHub) }
             });
 
             var json = document.ToJson();
@@ -32,11 +33,11 @@ namespace SigSpec
             Console.WriteLine(json);
             Console.ReadKey();
 
-            var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
-            var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
+            var codeGeneratorSettings = new SigSpecToJavaScriptGeneratorSettings();
+            var codeGenerator = new SigSpecToJavaScriptGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateFile(document);
 
-            Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
+            Console.WriteLine("\n\nGenerated SigSpec JavaScript code:");
             Console.WriteLine(file);
             Console.ReadKey();
         }

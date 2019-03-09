@@ -1,0 +1,5 @@
+﻿import { HubConnectionBuilder, LogLevel, IStreamResult } from "@aspnet/signalr"
+{% for hub in Hubs -%}
+
+{{ hub }}
+{% endfor -%}

@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Progress" Version="0.2.23.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SigSpec.CodeGeneration.JavaScript\SigSpec.CodeGeneration.JavaScript.csproj" />
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
     <ProjectReference Include="..\HelloSignalR\HelloSignalR.csproj" />
     <ProjectReference Include="..\SigSpec.CodeGeneration.TypeScript\SigSpec.CodeGeneration.TypeScript.csproj" />

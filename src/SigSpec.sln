@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.CodeGeneration.Type
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.Core", "SigSpec.Core\SigSpec.Core.csproj", "{AC85889F-7113-4C2E-B058-2CB7F02426F1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.CodeGeneration.JavaScript", "SigSpec.CodeGeneration.JavaScript\SigSpec.CodeGeneration.JavaScript.csproj", "{A160759B-8B20-475F-A6F1-21B75048FBF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A160759B-8B20-475F-A6F1-21B75048FBF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A160759B-8B20-475F-A6F1-21B75048FBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A160759B-8B20-475F-A6F1-21B75048FBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A160759B-8B20-475F-A6F1-21B75048FBF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
