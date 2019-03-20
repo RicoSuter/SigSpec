@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.22" />
-    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.22" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.26" />
   </ItemGroup>
 
   <ItemGroup>
