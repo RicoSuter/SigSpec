@@ -99,7 +99,7 @@ namespace SigSpec.Core
         {
             var operation = new SigSpecOperation
             {
-                Description = await type.GetXmlSummaryAsync(),
+                Description = await method.GetXmlSummaryAsync(),
                 Type = operationType
             };
 
