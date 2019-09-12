@@ -1,8 +1,12 @@
 ﻿using HelloSignalR;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using SigSpec.CodeGeneration.TypeScript;
 using SigSpec.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SigSpec
@@ -17,6 +21,12 @@ namespace SigSpec
 
         static async Task RunAsync()
         {
+            var serializerSettings = new Lazy<JsonSerializerSettings>(() => new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Converters = new List<JsonConverter> { new StringEnumConverter() }
+            });
+
             var settings = new SigSpecGeneratorSettings();
             var generator = new SigSpecGenerator(settings);
 
@@ -30,11 +40,13 @@ namespace SigSpec
 
             Console.WriteLine("\nGenerated SigSpec document:");
             Console.WriteLine(json);
+            File.WriteAllText("signalr.spec", JsonConvert.SerializeObject(document, Formatting.Indented, serializerSettings.Value));
             Console.ReadKey();
 
             var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
             var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
-            var file = codeGenerator.GenerateFile(document);
+            var deserializedDocument = JsonConvert.DeserializeObject<SigSpecDocument>(File.ReadAllText("signalr.spec"));
+            var file = codeGenerator.GenerateFile(deserializedDocument);
 
             Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
             Console.WriteLine(file);
