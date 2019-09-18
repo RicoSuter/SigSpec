@@ -2,13 +2,11 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema;
-using NJsonSchema.Converters;
 using System;
 using System.Collections.Generic;
 
 namespace SigSpec.Core
 {
-    [JsonConverter(typeof(JsonReferenceConverter))]
     public class SigSpecDocument
     {
         private static Lazy<JsonSerializerSettings> _serializerSettings = new Lazy<JsonSerializerSettings>(() => new JsonSerializerSettings

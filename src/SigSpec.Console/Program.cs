@@ -13,14 +13,10 @@ namespace SigSpec
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("SigSpec for SignalR Core");
-            RunAsync().GetAwaiter().GetResult();
-        }
 
-        static async Task RunAsync()
-        {
             var serializerSettings = new Lazy<JsonSerializerSettings>(() => new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -40,12 +36,13 @@ namespace SigSpec
 
             Console.WriteLine("\nGenerated SigSpec document:");
             Console.WriteLine(json);
-            File.WriteAllText("signalr.spec", JsonConvert.SerializeObject(document, Formatting.Indented, serializerSettings.Value));
+            File.WriteAllText("signalr.spec", json);
             Console.ReadKey();
 
             var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
             var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
-            var deserializedDocument = JsonConvert.DeserializeObject<SigSpecDocument>(File.ReadAllText("signalr.spec"));
+            var content = File.ReadAllText("signalr.spec");
+            var deserializedDocument = JsonConvert.DeserializeObject<SigSpecDocument>(content, serializerSettings.Value);
             var file = codeGenerator.GenerateFile(deserializedDocument);
 
             Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
