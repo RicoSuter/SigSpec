@@ -195,11 +195,16 @@ export class ChatHub {
         this.connection.on('Welcome', () => implementation.welcome());
         this.connection.on('Send', (message) => implementation.send(message));
     }
+
+    unregisterCallbacks(implementation: IChatHubCallbacks) {
+        this.connection.off('Welcome', () => implementation.welcome());
+        this.connection.off('Send', (message) => implementation.send(message));
+    }
 }
 
 export interface IChatHubCallbacks {
-    welcome();
-    send(message: string);
+    welcome(): void;
+    send(message: string): void;
 }
 
 export interface Person {

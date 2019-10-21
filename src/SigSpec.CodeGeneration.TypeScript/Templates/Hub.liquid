@@ -23,6 +23,12 @@
         this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
 {% endfor -%}
     }
+
+    unregisterCallbacks(implementation: I{{ Name }}HubCallbacks) {
+{% for operation in Callbacks -%}
+        this.connection.off('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+{% endfor -%}
+    }
 }
 
 export interface I{{ Name }}HubCallbacks {
