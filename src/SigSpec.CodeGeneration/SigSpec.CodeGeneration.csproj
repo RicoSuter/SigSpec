@@ -1,15 +1,41 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>	
+  </PropertyGroup>
+
+  <!-- Nuget-related properties -->
+  <PropertyGroup>    
+    <Owners>Rico Suter</Owners>
+	<Authors>Rico Suter</Authors>
+	<Description>SigSpec Code generation</Description>
+    <Version>0.1.2</Version>
+	
+    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>    
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PopulateNuspec</GenerateNuspecDependsOn>    
+	
+	<NJsonSchemaCodeGenerationPackageVersion>9.13.26</NJsonSchemaCodeGenerationPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="$(NJsonSchemaCodeGenerationPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
   </ItemGroup>
 
+  <Target Name="PopulateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        authors=$(Authors);
+		owners=$(Owners);
+        configuration=$(Configuration);
+        description=$(PackageDescription);
+        version=$(PackageVersion);
+        nJsonSchemaCodeGenerationPackageVersion=$(NJsonSchemaCodeGenerationPackageVersion);
+      </NuspecProperties>
+    </PropertyGroup>
+  </Target>
 </Project>

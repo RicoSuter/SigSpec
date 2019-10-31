@@ -1,7 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Nuget-related properties -->
+  <PropertyGroup>    
+    <Owners>Rico Suter</Owners>
+	<Authors>Rico Suter</Authors>
+	<Description>SigSpec Typescript Code generation package</Description>
+    <Version>0.1.2</Version>
+	
+    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>    
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PopulateNuspec</GenerateNuspecDependsOn>
+
+	<NJsonSchemaCodeGenerationPackageVersion>9.13.26</NJsonSchemaCodeGenerationPackageVersion>
+	<NJsonSchemaCodeGenerationTypeScriptPackageVersion>9.13.26</NJsonSchemaCodeGenerationTypeScriptPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,13 +29,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
-    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="$(NJsonSchemaCodeGenerationPackageVersion)" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="$(NJsonSchemaCodeGenerationTypeScriptPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
     <ProjectReference Include="..\SigSpec.CodeGeneration\SigSpec.CodeGeneration.csproj" />
   </ItemGroup>
+
+  <Target Name="PopulateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        authors=$(Authors);
+        owners=$(Owners);
+        configuration=$(Configuration);
+        description=$(PackageDescription);
+        version=$(PackageVersion);
+        nJsonSchemaCodeGenerationPackageVersion=$(NJsonSchemaCodeGenerationPackageVersion);
+		nJsonSchemaCodeGenerationTypeScriptPackageVersion=$(NJsonSchemaCodeGenerationTypeScriptPackageVersion);
+      </NuspecProperties>
+    </PropertyGroup>
+  </Target>
 
 </Project>

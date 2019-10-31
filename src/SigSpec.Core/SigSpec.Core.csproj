@@ -3,11 +3,42 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  
+  <!-- Nuget-related properties -->
+  <PropertyGroup>    
+    <Owners>Rico Suter</Owners>
+	<Authors>Rico Suter</Authors>
+	<Description>SigSpec Typescript Code generation package</Description>
+    <Version>0.1.2</Version>
+	
+    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>	
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PopulateNuspec</GenerateNuspecDependsOn>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	
+	<NJsonSchemaPackageVersion>9.13.26</NJsonSchemaPackageVersion>    
+	<NewtonsoftJsonPackageVersion>11.0.2</NewtonsoftJsonPackageVersion>
+	<MicrosoftAspNetCoreSignalRPackageVersion>1.0.3</MicrosoftAspNetCoreSignalRPackageVersion>
+  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NJsonSchema" Version="9.13.26" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.3" />
+  <ItemGroup>    
+    <PackageReference Include="NJsonSchema" Version="$(NJsonSchemaPackageVersion)" />
+	<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalRPackageVersion)" />
   </ItemGroup>
 
+  <Target Name="PopulateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        authors=$(Authors);
+        owners=$(Owners);
+        configuration=$(Configuration);
+        description=$(PackageDescription);
+        version=$(PackageVersion);
+        nJsonSchemaPackageVersion=$(NJsonSchemaPackageVersion);
+		newtonsoftJsonPackageVersion=$(NewtonsoftJsonPackageVersion);
+		microsoftAspNetCoreSignalRPackageVersion=$(MicrosoftAspNetCoreSignalRPackageVersion);
+      </NuspecProperties>
+    </PropertyGroup>
+  </Target>
 </Project>
