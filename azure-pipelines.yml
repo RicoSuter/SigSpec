@@ -60,7 +60,7 @@ steps:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
   inputs:
     command: push
-    packagesToPush: '$(System.DefaultWorkingDirectory)/SigSpec/drop/*.nupkg'
+    packagesToPush: '$(build.artifactstagingdirectory)/drop/*.nupkg'
     nuGetFeedType: external
     publishFeedCredentials: Nuget.org
 
@@ -69,5 +69,5 @@ steps:
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/features/'))
   inputs:
     command: push
-    packagesToPush: '$(System.DefaultWorkingDirectory)/SigSpec/drop/*.nupkg'
+    packagesToPush: '$(build.artifactstagingdirectory)/drop/*.nupkg'
     publishVstsFeed: '1a723df8-4c8c-465e-95c7-53cb8dee0c28'
