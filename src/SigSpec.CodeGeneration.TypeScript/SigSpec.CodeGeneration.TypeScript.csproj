@@ -8,7 +8,7 @@
   <PropertyGroup>    
     <Owners>Rico Suter</Owners>
 	<Authors>Rico Suter</Authors>
-	<Description>SigSpec Typescript Code generation package</Description>
+	<Description>SigSpec Typescript Code Generation package</Description>
     <Version>0.1.2</Version>
 	
     <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>    
