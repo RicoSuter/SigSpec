@@ -54,4 +54,20 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
-  condition: succeededOrFailed()
+
+- task: NuGetCommand@2
+  displayName: 'Push SigSpec packages to nuget.org'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
+  inputs:
+    command: push
+    packagesToPush: '$(System.DefaultWorkingDirectory)/SigSpec/drop/*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: Nuget.org
+
+- task: NuGetCommand@2
+  displayName: 'Push SigSpec packages to private Azure feed (test only)'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/features/'))
+  inputs:
+    command: push
+    packagesToPush: '$(System.DefaultWorkingDirectory)/SigSpec/drop/*.nupkg'
+    publishVstsFeed: '1a723df8-4c8c-465e-95c7-53cb8dee0c28'
