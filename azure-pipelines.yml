@@ -70,5 +70,5 @@ steps:
   inputs:
     command: push
     packagesToPush: '$(System.ArtifactsDirectory)/**/*.nupkg'
-    publishVstsFeed: '1a723df8-4c8c-465e-95c7-53cb8dee0c28'
+    publishVstsFeed: 'b65f7bd9-3b0e-4016-8750-33bbe77fdd2c'
     allowPackageConflicts: true
