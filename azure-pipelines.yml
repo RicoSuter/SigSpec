@@ -71,3 +71,4 @@ steps:
     command: push
     packagesToPush: '$(System.ArtifactsDirectory)/**/*.nupkg'
     publishVstsFeed: '1a723df8-4c8c-465e-95c7-53cb8dee0c28'
+    versioningScheme: byBuildNumber
