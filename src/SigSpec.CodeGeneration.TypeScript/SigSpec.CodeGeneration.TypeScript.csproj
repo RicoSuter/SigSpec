@@ -5,17 +5,16 @@
   </PropertyGroup>
 
   <!-- Nuget-related properties -->
-  <PropertyGroup>    
+  <PropertyGroup>
     <Owners>Rico Suter</Owners>
-	<Authors>Rico Suter</Authors>
-	<Description>SigSpec Typescript Code Generation package</Description>
+    <Authors>Rico Suter</Authors>
+    <Description>SigSpec Typescript Code Generation package</Description>
     <Version>0.1.2</Version>
-	
-    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>    
-    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PopulateNuspec</GenerateNuspecDependsOn>
-
-	<NJsonSchemaCodeGenerationPackageVersion>9.13.26</NJsonSchemaCodeGenerationPackageVersion>
-	<NJsonSchemaCodeGenerationTypeScriptPackageVersion>9.13.26</NJsonSchemaCodeGenerationTypeScriptPackageVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SignalR TypeScript CodeGeneration</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,28 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="$(NJsonSchemaCodeGenerationPackageVersion)" />
-    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="$(NJsonSchemaCodeGenerationTypeScriptPackageVersion)" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.26" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
     <ProjectReference Include="..\SigSpec.CodeGeneration\SigSpec.CodeGeneration.csproj" />
   </ItemGroup>
-
-  <Target Name="PopulateNuspec">
-    <PropertyGroup>
-      <NuspecProperties>
-        id=$(PackageId);
-        authors=$(Authors);
-        owners=$(Owners);
-        configuration=$(Configuration);
-        description=$(PackageDescription);
-        version=$(PackageVersion);
-        nJsonSchemaCodeGenerationPackageVersion=$(NJsonSchemaCodeGenerationPackageVersion);
-		nJsonSchemaCodeGenerationTypeScriptPackageVersion=$(NJsonSchemaCodeGenerationTypeScriptPackageVersion);
-      </NuspecProperties>
-    </PropertyGroup>
-  </Target>
-
 </Project>
