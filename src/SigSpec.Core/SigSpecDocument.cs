@@ -21,7 +21,7 @@ namespace SigSpec.Core
         public IDictionary<string, SigSpecHub> Hubs { get; } = new Dictionary<string, SigSpecHub>();
 
         [JsonProperty("definitions")]
-        public IDictionary<string, JsonSchema4> Definitions { get; } = new Dictionary<string, JsonSchema4>();
+        public IDictionary<string, JsonSchema> Definitions { get; } = new Dictionary<string, JsonSchema>();
 
         public string ToJson()
         {

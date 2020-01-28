@@ -9,10 +9,10 @@ namespace SigSpec
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("SigSpec for SignalR Core");
-            RunAsync().GetAwaiter().GetResult();
+            await RunAsync();
         }
 
         static async Task RunAsync()

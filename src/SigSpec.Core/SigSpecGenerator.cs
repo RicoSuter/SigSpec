@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Namotion.Reflection;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Infrastructure;
@@ -32,7 +33,7 @@ namespace SigSpec.Core
 
                 var hub = new SigSpecHub();
                 hub.Name = type.Name.EndsWith("Hub") ? type.Name.Substring(0, type.Name.Length - 3) : type.Name;
-                hub.Description = await type.GetXmlSummaryAsync();
+                hub.Description = type.GetXmlDocsSummary();
 
                 foreach (var method in GetOperationMethods(type))
                 {
@@ -99,16 +100,16 @@ namespace SigSpec.Core
         {
             var operation = new SigSpecOperation
             {
-                Description = await method.GetXmlSummaryAsync(),
+                Description = method.GetXmlDocsSummary(),
                 Type = operationType
             };
 
             foreach (var arg in method.GetParameters())
             {
-                var parameter = await generator.GenerateWithReferenceAndNullabilityAsync<SigSpecParameter>(
-                    arg.ParameterType, arg.GetCustomAttributes(), resolver, async (p, s) =>
+                var parameter = generator.GenerateWithReferenceAndNullability<SigSpecParameter>(
+                    arg.ParameterType.ToContextualType(), resolver, (p, s) =>
                     {
-                        p.Description = await arg.GetXmlDocumentationAsync();
+                        p.Description = arg.GetXmlDocs();
                     });
 
                 operation.Parameters[arg.Name] = parameter;
@@ -116,17 +117,17 @@ namespace SigSpec.Core
 
             var returnType =
                 operationType == SigSpecOperationType.Observable
-                    ? method.ReturnType.GetGenericTypeArguments().First()
+                    ? method.ReturnType.ToContextualType().OriginalGenericArguments.First()
                 : method.ReturnType == typeof(Task)
                     ? null
                 : method.ReturnType.IsGenericType && method.ReturnType.BaseType == typeof(Task)
-                    ? method.ReturnType.GetGenericTypeArguments().First()
+                    ? method.ReturnType.ToContextualType().OriginalGenericArguments.First()
                     : method.ReturnType;
 
-            operation.ReturnType = returnType == null ? null : await generator.GenerateWithReferenceAndNullabilityAsync<JsonSchema4>(
-                returnType, null, resolver, async (p, s) =>
+            operation.ReturnType = returnType == null ? null : generator.GenerateWithReferenceAndNullability<JsonSchema>(
+                returnType.ToContextualType(), resolver, (p, s) =>
                 {
-                    p.Description = await method.ReturnType.GetXmlSummaryAsync();
+                    p.Description = method.ReturnType.GetXmlDocsSummary();
                 });
 
             return operation;

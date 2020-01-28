@@ -2,7 +2,7 @@
 
 namespace SigSpec.Core
 {
-    public class SigSpecParameter : JsonSchema4
+    public class SigSpecParameter : JsonSchema
     {
 
     }

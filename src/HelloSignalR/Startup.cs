@@ -14,9 +14,12 @@ namespace HelloSignalR
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseStaticFiles();
-            app.UseSignalR(routes =>
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
