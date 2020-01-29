@@ -9,19 +9,19 @@ namespace SigSpec
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("SigSpec for SignalR Core");
-            await RunAsync();
+            Run();
         }
 
-        static async Task RunAsync()
+        static void Run()
         {
             var settings = new SigSpecGeneratorSettings();
             var generator = new SigSpecGenerator(settings);
 
             // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
-            var document = await generator.GenerateForHubsAsync(new Dictionary<string, Type>
+            var document = generator.GenerateForHubs(new Dictionary<string, Type>
             {
                 { "chat", typeof(ChatHub) }
             });

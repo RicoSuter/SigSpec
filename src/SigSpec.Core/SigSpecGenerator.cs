@@ -21,7 +21,7 @@ namespace SigSpec.Core
             _settings = settings;
         }
 
-        public async Task<SigSpecDocument> GenerateForHubsAsync(IReadOnlyDictionary<string, Type> hubs)
+        public SigSpecDocument GenerateForHubs(IReadOnlyDictionary<string, Type> hubs)
         {
             var document = new SigSpecDocument();
             var resolver = new SigSpecSchemaResolver(document, _settings);
@@ -37,13 +37,13 @@ namespace SigSpec.Core
 
                 foreach (var method in GetOperationMethods(type))
                 {
-                    var operation = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Sync);
+                    var operation = GenerateOperation(type, method, generator, resolver, SigSpecOperationType.Sync);
                     hub.Operations[method.Name] = operation;
                 }
 
                 foreach (var method in GetChannelMethods(type))
                 {
-                    hub.Operations[method.Name] = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Observable);
+                    hub.Operations[method.Name] = GenerateOperation(type, method, generator, resolver, SigSpecOperationType.Observable);
                 }
 
                 var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
@@ -52,7 +52,7 @@ namespace SigSpec.Core
                     var callbackType = baseTypeGenericArguments[0];
                     foreach (var callbackMethod in GetOperationMethods(callbackType))
                     {
-                        var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
+                        var callback = GenerateOperation(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
                         hub.Callbacks[callbackMethod.Name] = callback;
                     }
                 }
@@ -96,7 +96,7 @@ namespace SigSpec.Core
             });
         }
 
-        private async Task<SigSpecOperation> GenerateOperationAsync(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
+        private SigSpecOperation GenerateOperation(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
         {
             var operation = new SigSpecOperation
             {
