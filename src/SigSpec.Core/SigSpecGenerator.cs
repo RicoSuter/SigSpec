@@ -122,10 +122,10 @@ namespace SigSpec.Core
                     ? null
                 : method.ReturnType.IsGenericType && method.ReturnType.BaseType == typeof(Task)
                     ? method.ReturnType.ToContextualType().OriginalGenericArguments.First()
-                    : method.ReturnType;
+                    : method.ReturnType.ToContextualType();
 
             operation.ReturnType = returnType == null ? null : generator.GenerateWithReferenceAndNullability<JsonSchema>(
-                returnType.ToContextualType(), resolver, (p, s) =>
+                returnType, resolver, (p, s) =>
                 {
                     p.Description = method.ReturnType.GetXmlDocsSummary();
                 });
