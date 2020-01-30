@@ -27,7 +27,7 @@ namespace SigSpec.CodeGeneration.TypeScript
             {
                 var hubModel = new HubModel(hub.Key, hub.Value, resolver);
                 var template = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "Hub", hubModel);
-                artifacts.Add(new CodeArtifact(hubModel.Name, CodeArtifactType.Class, CodeArtifactLanguage.TypeScript, CodeArtifactCategory.Undefined, template));
+                artifacts.Add(new CodeArtifact(hubModel.Name, CodeArtifactType.Class, CodeArtifactLanguage.TypeScript, CodeArtifactCategory.Client, template));
             }
 
             if (_settings.GenerateDtoTypes)
