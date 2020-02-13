@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Namotion.Reflection;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Infrastructure;
@@ -20,7 +21,7 @@ namespace SigSpec.Core
             _settings = settings;
         }
 
-        public async Task<SigSpecDocument> GenerateForHubsAsync(IReadOnlyDictionary<string, Type> hubs)
+        public SigSpecDocument GenerateForHubs(IReadOnlyDictionary<string, Type> hubs)
         {
             var document = new SigSpecDocument();
             var resolver = new SigSpecSchemaResolver(document, _settings);
@@ -32,17 +33,17 @@ namespace SigSpec.Core
 
                 var hub = new SigSpecHub();
                 hub.Name = type.Name.EndsWith("Hub") ? type.Name.Substring(0, type.Name.Length - 3) : type.Name;
-                hub.Description = await type.GetXmlSummaryAsync();
+                hub.Description = type.GetXmlDocsSummary();
 
                 foreach (var method in GetOperationMethods(type))
                 {
-                    var operation = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Sync);
+                    var operation = GenerateOperation(type, method, generator, resolver, SigSpecOperationType.Sync);
                     hub.Operations[method.Name] = operation;
                 }
 
                 foreach (var method in GetChannelMethods(type))
                 {
-                    hub.Operations[method.Name] = await GenerateOperationAsync(type, method, generator, resolver, SigSpecOperationType.Observable);
+                    hub.Operations[method.Name] = GenerateOperation(type, method, generator, resolver, SigSpecOperationType.Observable);
                 }
 
                 var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
@@ -51,7 +52,7 @@ namespace SigSpec.Core
                     var callbackType = baseTypeGenericArguments[0];
                     foreach (var callbackMethod in GetOperationMethods(callbackType))
                     {
-                        var callback = await GenerateOperationAsync(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
+                        var callback = GenerateOperation(type, callbackMethod, generator, resolver, SigSpecOperationType.Sync);
                         hub.Callbacks[callbackMethod.Name] = callback;
                     }
                 }
@@ -95,20 +96,20 @@ namespace SigSpec.Core
             });
         }
 
-        private async Task<SigSpecOperation> GenerateOperationAsync(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
+        private SigSpecOperation GenerateOperation(Type type, MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
         {
             var operation = new SigSpecOperation
             {
-                Description = await method.GetXmlSummaryAsync(),
+                Description = method.GetXmlDocsSummary(),
                 Type = operationType
             };
 
             foreach (var arg in method.GetParameters())
             {
-                var parameter = await generator.GenerateWithReferenceAndNullabilityAsync<SigSpecParameter>(
-                    arg.ParameterType, arg.GetCustomAttributes(), resolver, async (p, s) =>
+                var parameter = generator.GenerateWithReferenceAndNullability<SigSpecParameter>(
+                    arg.ParameterType.ToContextualType(), resolver, (p, s) =>
                     {
-                        p.Description = await arg.GetXmlDocumentationAsync();
+                        p.Description = arg.GetXmlDocs();
                     });
 
                 operation.Parameters[arg.Name] = parameter;
@@ -116,17 +117,17 @@ namespace SigSpec.Core
 
             var returnType =
                 operationType == SigSpecOperationType.Observable
-                    ? method.ReturnType.GetGenericTypeArguments().First()
+                    ? method.ReturnType.ToContextualType().OriginalGenericArguments.First()
                 : method.ReturnType == typeof(Task)
                     ? null
                 : method.ReturnType.IsGenericType && method.ReturnType.BaseType == typeof(Task)
-                    ? method.ReturnType.GetGenericTypeArguments().First()
-                    : method.ReturnType;
+                    ? method.ReturnType.ToContextualType().OriginalGenericArguments.First()
+                    : method.ReturnType.ToContextualType();
 
-            operation.ReturnType = returnType == null ? null : await generator.GenerateWithReferenceAndNullabilityAsync<JsonSchema4>(
-                returnType, null, resolver, async (p, s) =>
+            operation.ReturnType = returnType == null ? null : generator.GenerateWithReferenceAndNullability<JsonSchema>(
+                returnType, resolver, (p, s) =>
                 {
-                    p.Description = await method.ReturnType.GetXmlSummaryAsync();
+                    p.Description = method.ReturnType.GetXmlDocsSummary();
                 });
 
             return operation;

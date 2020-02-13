@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <!-- Nuget-related properties -->
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="10.1.4" />
   </ItemGroup>
 
   <ItemGroup>
