@@ -1,13 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <!-- Nuget-related properties -->
+  <PropertyGroup>
+    <Owners>Rico Suter</Owners>
+    <Authors>Rico Suter</Authors>
+    <Description>SigSpec Core package</Description>
+    <Version>0.1.2</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SignalR CodeGeneration</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NJsonSchema" Version="9.13.26" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.3" />
   </ItemGroup>
-
 </Project>
