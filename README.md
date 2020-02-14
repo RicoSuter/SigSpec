@@ -173,9 +173,12 @@ Generated spec:
 Generated TypeScript code: 
 
 ```typescript
-import { HubConnection, IStreamResult } from "@aspnet/signalr"
+import { HubConnection, IStreamResult } from '@aspnet/signalr'
 
 export class ChatHub {
+    callbackForWelcome: () => void;
+    callbackForSend: (message: string) => void;
+
     constructor(private connection: HubConnection) {
     }
 
@@ -192,13 +195,15 @@ export class ChatHub {
     }
 
     registerCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.on('Welcome', () => implementation.welcome());
-        this.connection.on('Send', (message) => implementation.send(message));
+        this.callbackForWelcome = () => implementation.welcome();
+        this.connection.on('Welcome', this.callbackForWelcome);
+        this.callbackForSend = (message) => implementation.send(message);
+        this.connection.on('Send', this.callbackForSend);
     }
 
     unregisterCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.off('Welcome', () => implementation.welcome());
-        this.connection.off('Send', (message) => implementation.send(message));
+        this.connection.off('Welcome', this.callbackForWelcome);
+        this.connection.off('Send', this.callbackForSend);
     }
 }
 
