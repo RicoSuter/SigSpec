@@ -1,4 +1,8 @@
 ﻿export class {{ Name }}Hub {
+{% for operation in Callbacks -%}
+    callbackFor{{ operation.Name }}: ({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => void;
+{% endfor -%}
+
     constructor(private connection: HubConnection) {
     }
 {% for operation in Operations -%}
@@ -20,13 +24,14 @@
 
     registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
-        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.callbackFor{{ operation.Name }} = ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+        this.connection.on('{{ operation.Name }}', this.callbackFor{{ operation.Name }});
 {% endfor -%}
     }
 
     unregisterCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
-        this.connection.off('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.connection.off('{{ operation.Name }}', this.callbackFor{{ operation.Name }});
 {% endfor -%}
     }
 }
