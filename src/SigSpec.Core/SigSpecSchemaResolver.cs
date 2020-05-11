@@ -17,9 +17,9 @@ namespace SigSpec.Core
             _settings = settings;
         }
 
-        public override void AppendSchema(JsonSchema4 schema, string typeNameHint)
+        public override void AppendSchema(JsonSchema schema, string typeNameHint)
         {
-            // TODO: JsonSchemaResolver should use new IDefinitionsObject interface and not JsonSchema4
+            // TODO: JsonSchemaResolver should use new IDefinitionsObject interface and not JsonSchema
 
             if (schema == null)
                 throw new ArgumentNullException(nameof(schema));
