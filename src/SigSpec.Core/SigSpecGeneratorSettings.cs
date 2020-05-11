@@ -9,7 +9,7 @@ namespace SigSpec.Core
     {
         public SigSpecGeneratorSettings()
         {
-            this.SerializerSettings = new JsonSerializerSettings()
+            SerializerSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
