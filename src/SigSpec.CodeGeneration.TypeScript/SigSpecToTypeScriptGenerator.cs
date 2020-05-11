@@ -32,7 +32,6 @@ namespace SigSpec.CodeGeneration.TypeScript
 
             if (_settings.GenerateDtoTypes)
             {
-
                 var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
                 var types = generator.GenerateTypes();
 
