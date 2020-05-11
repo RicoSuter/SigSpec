@@ -40,7 +40,9 @@ namespace SigSpec.CodeGeneration.TypeScript
             }
             else
             {
-                return artifacts;
+                var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
+                var extensionCode = new TypeScriptExtensionCode(_settings.TypeScriptGeneratorSettings.ExtensionCode, _settings.TypeScriptGeneratorSettings.ExtendedClasses);
+                return artifacts.Concat(generator.GenerateTypes(extensionCode));
             }
         }
 
