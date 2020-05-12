@@ -173,10 +173,15 @@ Generated spec:
 Generated TypeScript code: 
 
 ```typescript
-import { HubConnection, IStreamResult } from "@aspnet/signalr"
+import { HubConnection, IStreamResult } from '@aspnet/signalr';
 
 export class ChatHub {
+    private callbackForWelcome: () => void;
+    private callbackForSend: (message: string) => void;
+
     constructor(private connection: HubConnection) {
+        this.callbackForWelcome = undefined;
+        this.callbackForSend = undefined;
     }
 
     send(message: string): Promise<void> {
@@ -191,14 +196,24 @@ export class ChatHub {
         return this.connection.stream('GetEvents');
     }
 
-    registerCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.on('Welcome', () => implementation.welcome());
-        this.connection.on('Send', (message) => implementation.send(message));
+    registerCallbacks(implementation: IChatHubCallbacks): void {
+        this.unregisterCallbacks();
+
+        this.callbackForWelcome = () => implementation.welcome();
+        this.connection.on('Welcome', this.callbackForWelcome);
+        this.callbackForSend = (message) => implementation.send(message);
+        this.connection.on('Send', this.callbackForSend);
     }
 
-    unregisterCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.off('Welcome', () => implementation.welcome());
-        this.connection.off('Send', (message) => implementation.send(message));
+    unregisterCallbacks(): void {
+        if (this.callbackForWelcome !== undefined) {
+            this.connection.off('Welcome', this.callbackForWelcome);
+            this.callbackForWelcome = undefined;
+        }
+        if (this.callbackForSend !== undefined) {
+            this.connection.off('Send', this.callbackForSend);
+            this.callbackForSend = undefined;
+        }
     }
 }
 
