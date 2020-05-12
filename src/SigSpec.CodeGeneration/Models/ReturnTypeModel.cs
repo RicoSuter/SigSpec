@@ -5,10 +5,10 @@ namespace SigSpec.CodeGeneration.Models
 {
     public class ReturnTypeModel
     {
-        private readonly JsonSchema4 _parameter;
+        private readonly JsonSchema _parameter;
         private readonly TypeResolverBase _resolver;
 
-        public ReturnTypeModel(JsonSchema4 parameter, TypeResolverBase resolver)
+        public ReturnTypeModel(JsonSchema parameter, TypeResolverBase resolver)
         {
             _parameter = parameter;
             _resolver = resolver;
