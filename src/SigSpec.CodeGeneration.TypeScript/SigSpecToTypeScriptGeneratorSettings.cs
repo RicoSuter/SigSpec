@@ -14,6 +14,7 @@ namespace SigSpec.CodeGeneration.TypeScript
                 typeof(TypeScriptGeneratorSettings).GetTypeInfo().Assembly,
                 typeof(SigSpecToTypeScriptGeneratorSettingsBase).GetTypeInfo().Assembly,
             });
+            TypeScriptGeneratorSettings.NullValue = TypeScriptNullValue.Null;
         }
 
         public TypeScriptGeneratorSettings TypeScriptGeneratorSettings => (TypeScriptGeneratorSettings)CodeGeneratorSettings;

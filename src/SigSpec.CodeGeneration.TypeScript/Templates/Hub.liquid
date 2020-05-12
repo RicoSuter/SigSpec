@@ -1,6 +1,5 @@
 ﻿export class {{ Name }}Hub {
-    constructor(private connection: HubConnection) {
-    }
+    constructor(private connection: HubConnection) {}
 {% for operation in Operations -%}
 
 {%     if operation.IsObservable -%}
@@ -18,15 +17,26 @@
 {%     endif -%}
 {% endfor -%}
 
+{% for operation in Callbacks -%}
+    on{{operation.Name}}(func : ({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})  => void ): void {
+        this.connection.on('{{ operation.Name }}', func);
+    }
+
+    unregister{{operation.Name}}(func : ({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %})  => void ): void {
+        this.connection.off('{{ operation.Name }}', func);
+    }
+{% endfor -%}
+
+
     registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
-        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.connection.on('{{ operation.Name }}', implementation.{{operation.MethodName}});
 {% endfor -%}
     }
 
     unregisterCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
-        this.connection.off('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.connection.off('{{ operation.Name }}', implementation.{{operation.MethodName}});
 {% endfor -%}
     }
 }
