@@ -17,7 +17,7 @@ namespace SigSpec.CodeGeneration.TypeScript
             _settings = settings;
         }
 
-        public CodeArtifactCollection GenerateArtifacts(SigSpecDocument document)
+        public IEnumerable<CodeArtifact> GenerateArtifacts(SigSpecDocument document)
         {
             var resolver = new TypeScriptTypeResolver(_settings.TypeScriptGeneratorSettings);
             resolver.RegisterSchemaDefinitions(document.Definitions);
@@ -27,7 +27,7 @@ namespace SigSpec.CodeGeneration.TypeScript
             {
                 var hubModel = new HubModel(hub.Key, hub.Value, resolver);
                 var template = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "Hub", hubModel);
-                artifacts.Add(new CodeArtifact(hubModel.Name, CodeArtifactType.Class, CodeArtifactLanguage.TypeScript, template));
+                artifacts.Add(new CodeArtifact(hubModel.Name, CodeArtifactType.Class, CodeArtifactLanguage.TypeScript, CodeArtifactCategory.Client, template.Render()));
             }
 
             if (_settings.GenerateDtoTypes)
@@ -35,12 +35,13 @@ namespace SigSpec.CodeGeneration.TypeScript
                 var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
                 var types = generator.GenerateTypes();
 
-                return new CodeArtifactCollection(artifacts.Concat(types.Artifacts), types.ExtensionCode);
+                return artifacts.Concat(types);
             }
             else
             {
+                var generator = new TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
                 var extensionCode = new TypeScriptExtensionCode(_settings.TypeScriptGeneratorSettings.ExtensionCode, _settings.TypeScriptGeneratorSettings.ExtendedClasses);
-                return new CodeArtifactCollection(artifacts, extensionCode);
+                return artifacts.Concat(generator.GenerateTypes(extensionCode));
             }
         }
 
@@ -48,7 +49,7 @@ namespace SigSpec.CodeGeneration.TypeScript
         {
             var artifacts = GenerateArtifacts(document);
 
-            var fileModel = new FileModel(artifacts.Artifacts.Select(a => a.Code));
+            var fileModel = new FileModel(artifacts.Select(a => a.Code));
             var fileTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "File", fileModel);
 
             return fileTemplate.Render();

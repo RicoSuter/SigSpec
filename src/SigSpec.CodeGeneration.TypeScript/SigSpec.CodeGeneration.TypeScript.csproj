@@ -28,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="9.13.26" />
-    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="10.1.15" />
+    <PackageReference Include="NJsonSchema.CodeGeneration.TypeScript" Version="10.1.15" />
   </ItemGroup>
 
   <ItemGroup>
