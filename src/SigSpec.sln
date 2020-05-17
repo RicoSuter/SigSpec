@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloSignalR", "HelloSignalR\HelloSignalR.csproj", "{F953B5DD-29F5-4C92-A057-B693767E3E74}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.CodeGeneration.TypeScript", "SigSpec.CodeGeneration.TypeScript\SigSpec.CodeGeneration.TypeScript.csproj", "{85EC367A-63E2-4BB8-91AA-75DE422B3AC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.Core", "SigSpec.Core\SigSpec.Core.csproj", "{AC85889F-7113-4C2E-B058-2CB7F02426F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SigSpec.Json.Middleware", "SigSpec.Json.Middleware\SigSpec.Json.Middleware.csproj", "{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC85889F-7113-4C2E-B058-2CB7F02426F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
