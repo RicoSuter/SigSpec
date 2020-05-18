@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
   </ItemGroup>
 
