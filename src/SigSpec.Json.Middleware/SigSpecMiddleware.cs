@@ -39,17 +39,12 @@ namespace SigSpec.Middleware
         private bool RequestingSigSpecDocument(HttpRequest request)
         {
             if (request.Method != "GET") return false;
-            if (request.PathBase.Value.Contains("sigspec") && request.Path.Value.Contains("spec.json"))
+            if (request.Path.Value.Contains("sigspec/spec.json"))
             {
                 return true;
             }
 
             return false;
-        }
-
-        private void RespondWithNotFound(HttpResponse response)
-        {
-            response.StatusCode = 404;
         }
 
         private async Task RespondWithSigSpecJson(HttpResponse response)

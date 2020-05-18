@@ -15,8 +15,6 @@ namespace HelloSignalR
         {
             services.AddSignalR();
 
-            services.AddRouting();
-
             services.AddCors(c =>
             {
                 c.AddDefaultPolicy(policy =>
@@ -31,11 +29,12 @@ namespace HelloSignalR
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSigSpec(new List<Type>() { typeof(ChatHub) });
 
             app.UseStaticFiles();
 
             app.UseCors();
+
+            app.UseSigSpec(new List<Type>() { typeof(ChatHub) });
 
             app.UseSignalR(routes =>
             {
