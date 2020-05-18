@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.CodeGeneration.Type
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.Core", "SigSpec.Core\SigSpec.Core.csproj", "{AC85889F-7113-4C2E-B058-2CB7F02426F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SigSpec.Json.Middleware", "SigSpec.Json.Middleware\SigSpec.Json.Middleware.csproj", "{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigSpec.Middleware", "SigSpec.Json.Middleware\SigSpec.Middleware.csproj", "{2D72407E-8A4C-4891-9D36-7C927F1AD9DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

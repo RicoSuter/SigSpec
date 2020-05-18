@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using SigSpec.Json.Middleware;
+using SigSpec.Middleware;
 using System;
 using System.Collections.Generic;
 
@@ -21,14 +21,17 @@ namespace HelloSignalR
             {
                 c.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials();
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin()
+                        .AllowCredentials();
                 });
             });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSigSpecUI(new List<Type>() { typeof(ChatHub) });
+            app.UseSigSpec(new List<Type>() { typeof(ChatHub) });
 
             app.UseStaticFiles();
 

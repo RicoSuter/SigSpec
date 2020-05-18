@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SigSpec.Json.Middleware
+namespace SigSpec.Middleware
 {
     public class SigSpecMiddleware
     {

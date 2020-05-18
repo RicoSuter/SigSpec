@@ -5,11 +5,11 @@ using SigSpec.Core;
 using System;
 using System.Collections.Generic;
 
-namespace SigSpec.Json.Middleware
+namespace SigSpec.Middleware
 {
-    public static class SigSpecUIBuilderExtensions
+    public static class SigSpecBuilderExtensions
     {
-        public static IApplicationBuilder UseSigSpecUI(this IApplicationBuilder app, IEnumerable<Type> hubs, Action<SigSpecGeneratorSettings> setupAction = null)
+        public static IApplicationBuilder UseSigSpec(this IApplicationBuilder app, IEnumerable<Type> hubs, Action<SigSpecGeneratorSettings> setupAction = null)
         {
             var options = new SigSpecGeneratorSettings();
             if (setupAction != null)
