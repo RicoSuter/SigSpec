@@ -169,55 +169,55 @@ Generated spec:
 Generated TypeScript code:
 
 ```typescript
-import { HubConnection, IStreamResult } from '@microsoft/signalr';
+import { HubConnection, IStreamResult } from "@microsoft/signalr";
 
 export class ChatHub {
   constructor(private connection: HubConnection) {}
 
   send(message: string): Promise<void> {
-    return this.connection.invoke('Send', message);
+    return this.connection.invoke("Send", message);
   }
 
   addPerson(person: Person): Promise<void> {
-    return this.connection.invoke('AddPerson', person);
+    return this.connection.invoke("AddPerson", person);
   }
 
   getEvents(): IStreamResult<Event> {
-    return this.connection.stream('GetEvents');
+    return this.connection.stream("GetEvents");
   }
 
   onWelcome(func: () => void): void {
-    this.connection.on('Welcome', func);
+    this.connection.on("Welcome", func);
   }
 
   unregisterWelcome(func: () => void): void {
-    this.connection.off('Welcome', func);
+    this.connection.off("Welcome", func);
   }
   onSend(func: (message: string) => void): void {
-    this.connection.on('Send', func);
+    this.connection.on("Send", func);
   }
 
   unregisterSend(func: (message: string) => void): void {
-    this.connection.off('Send', func);
+    this.connection.off("Send", func);
   }
   onPersonAdded(func: (person: Person) => void): void {
-    this.connection.on('PersonAdded', func);
+    this.connection.on("PersonAdded", func);
   }
 
   unregisterPersonAdded(func: (person: Person) => void): void {
-    this.connection.off('PersonAdded', func);
+    this.connection.off("PersonAdded", func);
   }
 
   registerCallbacks(implementation: IChatHubCallbacks) {
-    this.connection.on('Welcome', implementation.welcome);
-    this.connection.on('Send', implementation.send);
-    this.connection.on('PersonAdded', implementation.personAdded);
+    this.connection.on("Welcome", () => implementation.welcome());
+    this.connection.on("Send", message => implementation.send(message));
+    this.connection.on("PersonAdded", person => implementation.personAdded(person));
   }
 
   unregisterCallbacks(implementation: IChatHubCallbacks) {
-    this.connection.off('Welcome', implementation.welcome);
-    this.connection.off('Send', implementation.send);
-    this.connection.off('PersonAdded', implementation.personAdded);
+    this.connection.off("Welcome", () => implementation.welcome());
+    this.connection.off("Send", message => implementation.send(message));
+    this.connection.off("PersonAdded", person => implementation.personAdded(person));
   }
 }
 
