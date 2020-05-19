@@ -10,6 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SigSpec.Json.Middleware\SigSpec.Middleware.csproj" />
+    <ProjectReference Include="..\SigSpec.AspNetCore\SigSpec.AspNetCore.csproj" />
   </ItemGroup>
 </Project>

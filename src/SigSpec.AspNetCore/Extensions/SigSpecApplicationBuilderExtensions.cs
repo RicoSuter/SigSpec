@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using SigSpec.AspNetCore.Middleware;
 using SigSpec.Core;
-using System;
-using System.Collections.Generic;
 
-namespace SigSpec.Middleware
+namespace Microsoft.AspNetCore.Builder
 {
-    public static class SigSpecBuilderExtensions
+    public static class SigSpecApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseSigSpec(this IApplicationBuilder app, IEnumerable<Type> hubs, Action<SigSpecGeneratorSettings> setupAction = null)
+        public static IApplicationBuilder UseSigSpec(this IApplicationBuilder app, Action<SigSpecGeneratorSettings> setupAction = null)
         {
             var options = new SigSpecGeneratorSettings();
             if (setupAction != null)
@@ -21,7 +20,7 @@ namespace SigSpec.Middleware
                 options = app.ApplicationServices.GetRequiredService<IOptions<SigSpecGeneratorSettings>>().Value;
             }
 
-            app.UseMiddleware<SigSpecMiddleware>(hubs, options);
+            app.UseMiddleware<SigSpecMiddleware>(options);
 
             return app;
         }

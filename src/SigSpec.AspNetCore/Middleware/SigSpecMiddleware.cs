@@ -1,28 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
-using SigSpec.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using SigSpec.Core;
 
-namespace SigSpec.Middleware
+namespace SigSpec.AspNetCore.Middleware
 {
     public class SigSpecMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IEnumerable<Type> hubs;
-        private readonly SigSpecGeneratorSettings settings;
+        private readonly SigSpecGeneratorSettings _settings;
 
         public SigSpecMiddleware(
             RequestDelegate next,
-            List<Type> hubs,
             SigSpecGeneratorSettings settings
            )
         {
             _next = next;
-            this.hubs = hubs;
-            this.settings = settings;
+            _settings = settings;
         }
 
         public async Task Invoke(HttpContext httpContext)
@@ -52,10 +49,10 @@ namespace SigSpec.Middleware
             response.StatusCode = 200;
             response.ContentType = "application/json;charset=utf-8";
 
-            var generator = new SigSpecGenerator(settings);
+            var generator = new SigSpecGenerator(_settings);
 
             // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
-            Dictionary<string, Type> hubsDict = hubs.ToDictionary(k => k.Name.ToLower(), k => k);
+            Dictionary<string, Type> hubsDict = _settings.Hubs.ToDictionary(k => k.Name.ToLower(), k => k);
             var document = await generator.GenerateForHubsAsync(hubsDict);
 
             var json = document.ToJson();

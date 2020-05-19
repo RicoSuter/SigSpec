@@ -2,4 +2,4 @@
 /src/**/obj
 /src/**/bin
 /src/New folder
-*.csproj.user
+**/*.user
