@@ -219,3 +219,11 @@ export interface Event {
     Type: string;
 }
 ```
+
+# Development
+
+## Release new version
+
+1. Update versions with [dnt bump-versions patch](https://github.com/RicoSuter/DNT#bump-versions)
+2. Commit to "master" (via PR)
+3. Merge into "release" to start nuget.org publish (via PR)
