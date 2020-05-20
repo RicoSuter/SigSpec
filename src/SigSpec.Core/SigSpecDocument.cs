@@ -25,6 +25,7 @@ namespace SigSpec.Core
         [JsonProperty(PropertyName = "info", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public SigSpecInfo Info { get; set; } = new SigSpecInfo();
 
+        /// <summary>Gets the exposed SignalR hubs.</summary>
         [JsonProperty("hubs")]
         public IDictionary<string, SigSpecHub> Hubs { get; } = new Dictionary<string, SigSpecHub>();
 
