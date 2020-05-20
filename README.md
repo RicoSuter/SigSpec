@@ -1,5 +1,8 @@
 # SigSpec for SignalR Core
 
+[![Azure DevOps](https://img.shields.io/azure-devops/build/rsuter/9023bd0a-b641-4e30-9c0f-a7c15e1e080e/22/master.svg)](https://dev.azure.com/rsuter/Namotion/_build?definitionId=22)
+[![Azure DevOps](https://img.shields.io/azure-devops/coverage/rsuter/9023bd0a-b641-4e30-9c0f-a7c15e1e080e/22/master.svg)](https://dev.azure.com/rsuter/Namotion/_build?definitionId=22)
+
 **Experimental API endpoint specification** and code generator for [SignalR Core](https://github.com/aspnet/SignalR).
 
 Run SigSpec.Console to see a demo spec and the generated TypeScript code.
