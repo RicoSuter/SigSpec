@@ -4,17 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- Nuget-related properties -->
   <PropertyGroup>
     <Owners>Rico Suter</Owners>
     <Authors>Rico Suter</Authors>
-    <Description>SigSpec Typescript Code Generation package</Description>
+    <Description>Specification and code generator for SignalR Core.</Description>
     <Version>0.1.2</Version>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>SignalR TypeScript CodeGeneration</PackageTags>
+    <PackageTags>SignalR Specification CodeGeneration TypeScript</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

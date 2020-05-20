@@ -1,7 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Owners>Rico Suter</Owners>
+    <Authors>Rico Suter</Authors>
+    <Description>Specification and code generator for SignalR Core.</Description>
+    <Version>0.1.2</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SignalR Specification CodeGeneration</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
