@@ -25,7 +25,7 @@
         });
 
         connection.on('Welcome', data => {
-            alert('Hello');
+            alert('Welcome message.');
         });
 
         connection.start().then(() => connection.invoke('send', ''));

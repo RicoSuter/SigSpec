@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using SigSpec.Core;
 
-namespace SigSpec.AspNetCore.Middleware
+namespace SigSpec.AspNetCore.Middlewares
 {
-    public class SigSpecMiddleware
+    internal class SigSpecMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly SigSpecGeneratorSettings _settings;
+        private readonly SigSpecSettings _settings;
 
-        public SigSpecMiddleware(
-            RequestDelegate next,
-            SigSpecGeneratorSettings settings
-           )
+        public SigSpecMiddleware(RequestDelegate next, SigSpecSettings settings)
         {
             _next = next;
             _settings = settings;
@@ -30,12 +25,16 @@ namespace SigSpec.AspNetCore.Middleware
                 return;
             }
 
-            await RespondWithSigSpecJson(httpContext.Response);
+            await RespondWithSigSpecJsonAsync(httpContext.Response);
         }
 
         private bool RequestingSigSpecDocument(HttpRequest request)
         {
-            if (request.Method != "GET") return false;
+            if (request.Method != "GET")
+            {
+                return false;
+            }
+
             if (request.Path.Value.Contains("sigspec/spec.json"))
             {
                 return true;
@@ -44,7 +43,7 @@ namespace SigSpec.AspNetCore.Middleware
             return false;
         }
 
-        private async Task RespondWithSigSpecJson(HttpResponse response)
+        private async Task RespondWithSigSpecJsonAsync(HttpResponse response)
         {
             response.StatusCode = 200;
             response.ContentType = "application/json;charset=utf-8";
@@ -52,9 +51,12 @@ namespace SigSpec.AspNetCore.Middleware
             var generator = new SigSpecGenerator(_settings);
 
             // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
-            Dictionary<string, Type> hubsDict = _settings.Hubs.ToDictionary(k => k.Name.ToLower(), k => k);
-            var document = await generator.GenerateForHubsAsync(hubsDict);
+            // TODO: Upgrade to .NET Core 3.1
 
+            var hubs = _settings.Hubs
+                .ToDictionary(k => k.Name.ToLower(), k => k);
+
+            var document = await generator.GenerateForHubsAsync(hubs, _settings.Template);
             var json = document.ToJson();
 
             await response.WriteAsync(json, new UTF8Encoding(false));
