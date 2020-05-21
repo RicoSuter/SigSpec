@@ -68,7 +68,7 @@ steps:
   inputs:
     verbose: false
 
-- task: Npm@2
+- task: Npm@1
   displayName: 'Build UI'
   inputs:
     command: custom
