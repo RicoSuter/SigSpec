@@ -102,7 +102,7 @@ export default Vue.extend({
             open: false,
             callbackMessages: [] as {
                 timeStamp: Date;
-                params: Record<string, any>[];
+                params: Record<string, any>;
             }[],
             listening: false
         };
@@ -120,8 +120,7 @@ export default Vue.extend({
             this.callbackMessages.push({
                 timeStamp: new Date(Date.now()),
                 params: this.callback.parameters.map((p, i) => ({
-                    name: p.name,
-                    value: args[i]
+                    [p.name]: args[i]
                 }))
             });
         },

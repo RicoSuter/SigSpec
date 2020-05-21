@@ -11,9 +11,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Definition } from '../models/Spec';
-interface Dictionary<T> {
-    [Key: string]: T;
-}
+
 export default Vue.extend({
     props: {
         definition: {
@@ -26,7 +24,7 @@ export default Vue.extend({
         };
     },
     created() {
-        const values: Dictionary<string> = {};
+        const values: Record<string, string> = {};
         for (const key in this.definition.properties) {
             values[
                 this.definition.properties[key].name

@@ -63,6 +63,19 @@ steps:
     AzureBlobStorageConnectionString: $(AzureBlobStorageConnectionString)
     FtpPassword: $(FtpPassword)
 
+- task: Npm@1
+  displayName: 'Install UI Dependencies'
+  inputs:
+    verbose: false
+
+- task: Npm@2
+  displayName: 'Build UI'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: build
+
+
 # Publish artifacts
 - task: CopyFiles@2
   displayName: 'Copy packages'
