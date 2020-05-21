@@ -19,7 +19,7 @@ namespace HelloSignalR
 
         public Task AddPerson(Person person)
         {
-            return Task.CompletedTask;
+            return Clients.All.PersonAdded(person);
         }
 
         public ChannelReader<Event> GetEvents()
@@ -49,5 +49,7 @@ namespace HelloSignalR
         Task Welcome();
 
         Task Send(string message);
+
+        Task PersonAdded(Person person);
     }
 }

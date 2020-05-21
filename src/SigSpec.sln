@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EC91FE8E
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 	EndProjectSection
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SigSpec.UI", "SigSpec.UI\SigSpec.UI.njsproj", "{125E66FA-7EE5-4675-BBDD-DE8B7D60C7C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{2D8AA80F-DA03-4AD6-97A3-6D465466A3C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D8AA80F-DA03-4AD6-97A3-6D465466A3C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D8AA80F-DA03-4AD6-97A3-6D465466A3C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{125E66FA-7EE5-4675-BBDD-DE8B7D60C7C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{125E66FA-7EE5-4675-BBDD-DE8B7D60C7C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{125E66FA-7EE5-4675-BBDD-DE8B7D60C7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{125E66FA-7EE5-4675-BBDD-DE8B7D60C7C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

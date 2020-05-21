@@ -1,0 +1,168 @@
+{
+  "hubs": {
+    "chat": {
+      "name": "Chat",
+      "description": "",
+      "operations": {
+        "Send": {
+          "description": "",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        },
+        "AddPerson": {
+          "description": "",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
+            }
+          }
+        },
+        "GetEvents": {
+          "description": "",
+          "parameters": {},
+          "returntype": {
+            "description": "Provides a base class for reading from a channel.",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/Event"
+              }
+            ]
+          },
+          "type": "Observable"
+        }
+      },
+      "callbacks": {
+        "Welcome": {
+          "description": "",
+          "parameters": {}
+        },
+        "Send": {
+          "description": "",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        },
+        "PersonAdded": {
+          "description": "This will be called when a person is updated",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "weatherHub": {
+      "name": "weather",
+      "description": "",
+      "operations": {
+        "UpdateWeather": {
+          "description": "this is an enpoint to update weather",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        },
+        "AddPerson": {
+          "description": "",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
+            }
+          }
+        },
+        "GetEvents": {
+          "description": "",
+          "parameters": {},
+          "returntype": {
+            "description": "Provides a base class for reading from a channel.",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/Event"
+              }
+            ]
+          },
+          "type": "Observable"
+        }
+      },
+      "callbacks": {
+        "Welcome": {
+          "description": "",
+          "parameters": {}
+        },
+        "Send": {
+          "description": "",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        },
+        "PersonAdded": {
+          "description": "This will be called when a person is updated",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Person": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "firstName": {
+          "type": ["null", "string"]
+        },
+        "lastName": {
+          "type": ["null", "string"]
+        },
+        "age": {
+          "type": ["number"]
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": ["null", "string"]
+        }
+      }
+    }
+  }
+}
