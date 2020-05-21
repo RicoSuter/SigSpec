@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NJsonSchema;
 using NJsonSchema.Generation;
-using NJsonSchema.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +23,12 @@ namespace SigSpec.Core
         public async Task<SigSpecDocument> GenerateForHubsAsync(IReadOnlyDictionary<string, Type> hubs)
         {
             var document = new SigSpecDocument();
+            return await GenerateForHubsAsync(hubs, document);
+        }
+
+        public async Task<SigSpecDocument> GenerateForHubsAsync(IReadOnlyDictionary<string, Type> hubs, SigSpecDocument template)
+        {
+            var document = template;
             var resolver = new SigSpecSchemaResolver(document, _settings);
             var generator = new JsonSchemaGenerator(_settings);
 

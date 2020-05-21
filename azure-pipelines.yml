@@ -1,74 +1,80 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+trigger:
+  branches:
+      include:
+      - master
+      - release
+      - refs/tags/*
+pr:
+- master
 
 pool:
-  name: Azure Pipelines
   vmImage: 'windows-2019'
 
 variables:
-  BuildConfiguration: 'Release'
-  Parameters.RestoreBuildProjects: '**/SigSpec.sln'
-  Parameters.TestProjects: '**/*[Tt]ests/*.csproj'
+  BuildConfiguration: Release
+  Projects: '**/*.csproj'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: Restore
+# Install required SDKs and tools
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
   inputs:
-    command: restore
-    projects: '$(Parameters.RestoreBuildProjects)'
+    packageType: 'sdk'
+    version: '3.1.101'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
+# Patch preview project versions (only when on master branch)
+- task: CmdLine@2
+  displayName: 'Install DNT'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
-    projects: '$(Parameters.RestoreBuildProjects)'
+    script: 'npm i -g dotnettools'
+- task: CmdLine@2
+  displayName: 'Update project version patch'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'dnt bump-versions patch'
+    failOnStderr: true
+- task: CmdLine@2
+  displayName: 'Patch project version preview'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'dnt bump-versions preview "$(Build.BuildNumber)"'
+    failOnStderr: true
+
+# Build and test
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: 'build'
+    projects: '$(Projects)'
     arguments: '--configuration $(BuildConfiguration)'
-
+    feedsToUse: 'select'
+    versioningScheme: 'off'
 - task: DotNetCoreCLI@2
-  displayName: Test
+  displayName: 'Run tests'
   inputs:
-    command: test
-    projects: '$(Parameters.TestProjects)'
-    arguments: '--configuration $(BuildConfiguration)'
+    command: 'test'
+    projects: '$(Projects)'
+    arguments: '--configuration $(BuildConfiguration) --collect "Code Coverage" --settings "$(Build.SourcesDirectory)/src/CodeCoverage.runsettings"'
+    publishTestResults: true
+    feedsToUse: 'select'
+    versioningScheme: 'off'
+  env:
+    AzureBlobStorageConnectionString: $(AzureBlobStorageConnectionString)
+    FtpPassword: $(FtpPassword)
 
-- task: DotNetCoreCLI@2
-  displayName: 'Pack SigSpec.Core'
+# Publish artifacts
+- task: CopyFiles@2
+  displayName: 'Copy packages'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   inputs:
-    command: pack
-    packagesToPack: src/SigSpec.Core/SigSpec.Core.csproj
-
-- task: DotNetCoreCLI@2
-  displayName: 'Pack SigSpec.CodeGeneration'
-  inputs:
-    command: pack
-    packagesToPack: src/SigSpec.CodeGeneration/SigSpec.CodeGeneration.csproj
-
-- task: DotNetCoreCLI@2
-  displayName: 'Pack SigSpec.CodeGeneration.TypeScript'
-  inputs:
-    command: pack
-    packagesToPack: src/SigSpec.CodeGeneration.TypeScript/SigSpec.CodeGeneration.TypeScript.csproj
-
+    Contents: '**/*.nupkg'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    flattenFolders: true
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
+  displayName: 'Publish artifacts'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-
-- task: NuGetCommand@2
-  displayName: 'Push SigSpec packages to nuget.org'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
-  inputs:
-    command: push
-    packagesToPush: '$(System.ArtifactsDirectory)/**/*.nupkg'
-    nuGetFeedType: external
-    publishFeedCredentials: Nuget.org
-
-- task: NuGetCommand@2
-  displayName: 'Push SigSpec packages to private Azure feed (test only)'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/features/'))
-  inputs:
-    command: push
-    packagesToPush: '$(System.ArtifactsDirectory)/**/*.nupkg'
-    publishVstsFeed: 'b65f7bd9-3b0e-4016-8750-33bbe77fdd2c'
-    allowPackageConflicts: true
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

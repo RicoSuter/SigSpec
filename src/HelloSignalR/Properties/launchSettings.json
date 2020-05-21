@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:61327/index.html",
+      "applicationUrl": "http://localhost:5001/index.html",
       "sslPort": 0
     }
   },
@@ -18,10 +18,11 @@
     "HelloSignalR": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:61328/"
+      "applicationUrl": "https://localhost:5001/"
     }
   }
 }

@@ -17,6 +17,15 @@ namespace SigSpec.Core
             Converters = new List<JsonConverter> { new StringEnumConverter() }
         });
 
+        /// <summary>Gets or sets the SigSpec specification version being used.</summary>
+        [JsonProperty(PropertyName = "sigspec", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public string SigSpec { get; set; } = "1.0.0";
+
+        /// <summary>Gets or sets the metadata about the API.</summary>
+        [JsonProperty(PropertyName = "info", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public SigSpecInfo Info { get; set; } = new SigSpecInfo();
+
+        /// <summary>Gets the exposed SignalR hubs.</summary>
         [JsonProperty("hubs")]
         public IDictionary<string, SigSpecHub> Hubs { get; } = new Dictionary<string, SigSpecHub>();
 
