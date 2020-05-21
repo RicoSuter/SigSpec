@@ -1,7 +1,7 @@
 <template>
   <div class="opblock opblock-get" :class="{ 'is-open': open }" id="operations-pet-uploadFile">
     <div @click="open = !open" class="opblock-summary opblock-summary-get">
-      <span class="opblock-summary-method">CALLBACK</span>
+      <span class="opblock-summary-method">Callback</span>
       <span class="opblock-summary-path" data-path="/pet/{petId}">
         <a class="nostyle" href="#/pet/getPetById">
           <span>{{ callback.name }}</span>
@@ -69,7 +69,7 @@
           </div>
           <div class="responses-inner"></div>
           <pre class="microlight">
-                <div :key="message.timeStamp" v-for="message in callbackMessages">{{message}}</div>
+                <div :key="index" v-for="(message, index) in callbackMessages">{{message}}</div>
           </pre>
         </div>
       </div>
@@ -100,7 +100,10 @@ export default Vue.extend({
     data() {
         return {
             open: false,
-            callbackMessages: [] as { timeStamp: Date; params: any[] }[],
+            callbackMessages: [] as {
+                timeStamp: Date;
+                params: Record<string, any>[];
+            }[],
             listening: false
         };
     },
@@ -113,7 +116,7 @@ export default Vue.extend({
             const name = parts[parts.length - 1];
             return this.definitions.find(d => d.name == name);
         },
-        listenerHandler(...args: any[]) {
+        listenerHandler(...args: Record<string, any>[]) {
             this.callbackMessages.push({
                 timeStamp: new Date(Date.now()),
                 params: this.callback.parameters.map((p, i) => ({
@@ -134,5 +137,10 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style>
+.swagger-ui.sigspec-ui .opblock-body pre.microlight {
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 20px;
+}
 </style>

@@ -1,15 +1,23 @@
 <template>
-  <div id="app" class="swagger-ui">
+  <div id="app" class="swagger-ui sigspec-ui">
     <div class="topbar">
       <div class="wrapper">
         <div class="topbar-wrapper">
           <a rel="noopener noreferrer" class="link">
             <h4 class="title">SigSpec UI</h4>
           </a>
-          <form class="download-url-wrapper">
+          <div class="download-url-wrapper">
             <input type="text" class="download-url-input" v-model="specUrl" style />
-            <button class="download-url-button button">Explore</button>
-          </form>
+            <button @click="loadSpec" class="download-url-button button">Explore</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="loading-container" v-if="loading">
+      <div class="info">
+        <div class="loading-container">
+          <!--      <h4 class="title">Failed to load API definition.</h4> -->
+          <div class="loading"></div>
         </div>
       </div>
     </div>
@@ -53,7 +61,8 @@ export default Vue.extend({
     data() {
         return {
             specDef: null as Record<string, any> | null,
-            baseURL: null as string | null
+            baseURL: null as string | null,
+            loading: false
         };
     },
     computed: {
@@ -70,17 +79,7 @@ export default Vue.extend({
     created() {
         if (window.baseURL) {
             this.baseURL = window.baseURL;
-            fetch(this.specUrl, { mode: 'cors' })
-                .then(response => {
-                    return response.text();
-                })
-                .then(text => {
-                    this.specDef = JSON.parse(text);
-                    console.log('Request successful', text);
-                })
-                .catch(error => {
-                    console.error('Request failed', error);
-                });
+            this.loadSpec();
         } else {
             this.specDef = spec;
         }
@@ -88,6 +87,23 @@ export default Vue.extend({
         return true;
     },
     methods: {
+        loadSpec() {
+            this.loading = true;
+            this.specDef = null;
+            fetch(this.specUrl, { mode: 'cors' })
+                .then(response => {
+                    return response.text();
+                })
+                .then(text => {
+                    this.specDef = JSON.parse(text);
+                })
+                .catch(error => {
+                    alert('Request failed' + error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         definition(path: string) {
             const parts = path.split('/');
             const name = parts[parts.length - 1];

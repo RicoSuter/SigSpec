@@ -19,9 +19,9 @@
       </button>
     </h4>
     <div v-if="open">
-      <operation :key="operation.name" :connection="connection" v-for="operation in hub.operations" :operation="operation" :name="operation.name" :definitions="definitions" />
+      <operation :key="`op-${operation.name}`" :connection="connection" v-for="operation in hub.operations" :operation="operation" :name="operation.name" :definitions="definitions" />
 
-      <callback :key="callback.name" :connection="connection" v-for="callback in hub.callbacks" :callback="callback" :definitions="definitions" :name="callback.name" />
+      <callback :key="`callback-${callback.name}`" :connection="connection" v-for="callback in hub.callbacks" :callback="callback" :definitions="definitions" :name="callback.name" />
     </div>
   </div>
 </template>
@@ -67,7 +67,6 @@ export default Vue.extend({
     },
     methods: {
         connect() {
-            console.log(this.baseURL);
             this.connection = new HubConnectionBuilder()
                 .withUrl(`${this.baseURL}${this.hub.name.replace('hub', '')}`)
                 .withAutomaticReconnect()
