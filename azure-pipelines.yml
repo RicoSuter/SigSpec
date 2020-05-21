@@ -66,13 +66,13 @@ steps:
 - task: Npm@1
   displayName: 'Install UI Dependencies'
   inputs:
-    workingDir: "SigSpec.UI"
+    workingDir: "src/SigSpec.UI"
     verbose: false
 
 - task: Npm@1
   displayName: 'Build UI'
   inputs:
-    workingDir: "SigSpec.UI"
+    workingDir: "src/SigSpec.UI"
     command: custom
     verbose: false
     customCommand: run build
