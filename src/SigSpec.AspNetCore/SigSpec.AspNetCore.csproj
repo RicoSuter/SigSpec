@@ -14,7 +14,15 @@
     <PackageTags>SignalR Specification CodeGeneration</PackageTags>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="SigSpecUi\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SigSpecUi\index.html" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />

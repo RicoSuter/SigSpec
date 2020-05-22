@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 
 namespace HelloSignalR
 {
@@ -11,6 +9,9 @@ namespace HelloSignalR
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
+
+            // TODO: Automatically look hubs up
+            services.AddSigSpecDocument(o => o.Hubs["/chat"] = typeof(ChatHub));
 
             services.AddCors(c =>
             {
@@ -26,12 +27,11 @@ namespace HelloSignalR
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
             app.UseStaticFiles();
-
             app.UseCors();
 
-            app.UseSigSpec(options => { options.Hubs = new List<Type>() {typeof(ChatHub)}; });
+            app.UseSigSpec();
+            app.UseSigSpecUi();
 
             app.UseSignalR(routes =>
             {
