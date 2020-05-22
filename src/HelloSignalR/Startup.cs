@@ -33,6 +33,8 @@ namespace HelloSignalR
 
             app.UseSigSpec(options => { options.Hubs = new List<Type>() {typeof(ChatHub)}; });
 
+            app.UseSigSpecUi();
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chat");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using SigSpec.Core;
 
 namespace SigSpec.AspNetCore.Middlewares
@@ -9,5 +10,10 @@ namespace SigSpec.AspNetCore.Middlewares
         public ICollection<Type> Hubs { get; set; } = new List<Type>();
 
         public SigSpecDocument Template { get; set; } = new SigSpecDocument();
+
+        public string TransformHtml(string html, HttpRequest contextRequest)
+        {
+            return html;
+        }
     }
 }
