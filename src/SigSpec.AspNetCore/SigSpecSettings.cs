@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using SigSpec.Core;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace SigSpec.AspNetCore.Middlewares
 {
-    public class SigSpecSettings : SigSpecGeneratorSettings
+    public class SigSpecSettings
     {
-        public ICollection<Type> Hubs { get; set; } = new List<Type>();
-
-        public SigSpecDocument Template { get; set; } = new SigSpecDocument();
+        /// <summary>Gets or sets the path to serve the SigSpec document (default: '/sigspec/{documentName}/sigspec.json').</summary>
+        public string Path { get; set; } = "/sigspec/{documentName}/sigspec.json";
 
         public string TransformHtml(string html, HttpRequest contextRequest)
         {

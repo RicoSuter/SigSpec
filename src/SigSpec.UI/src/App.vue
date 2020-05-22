@@ -47,92 +47,92 @@ import Definition from '@/components/Definition.vue';
 import { Spec, specBuilder } from './models/Spec';
 
 declare global {
-    interface Window {
-        baseURL: string;
-    }
+  interface Window {
+    baseURL: string;
+  }
 }
 
 export default Vue.extend({
-    name: 'App',
-    components: {
-        Hub,
-        Definition
+  name: 'App',
+  components: {
+    Hub,
+    Definition,
+  },
+  data() {
+    return {
+      specDef: null as Record<string, any> | null,
+      baseURL: null as string | null,
+      loading: false,
+    };
+  },
+  computed: {
+    spec(): Spec {
+      if (this.specDef) {
+        return specBuilder(this.specDef);
+      }
+      return { hubs: [], definitions: [] };
     },
-    data() {
-        return {
-            specDef: null as Record<string, any> | null,
-            baseURL: null as string | null,
-            loading: false
-        };
+    specUrl(): string {
+      return this.baseURL + 'sigspec/v1/sigspec.json';
     },
-    computed: {
-        spec(): Spec {
-            if (this.specDef) {
-                return specBuilder(this.specDef);
-            }
-            return { hubs: [], definitions: [] };
-        },
-        specUrl(): string {
-            return this.baseURL + 'sigspec/spec.json';
-        }
-    },
-    created() {
-        if (window.baseURL) {
-            this.baseURL = window.baseURL;
-            this.loadSpec();
-        } else {
-            this.specDef = spec;
-        }
-
-        return true;
-    },
-    methods: {
-        loadSpec() {
-            this.loading = true;
-            this.specDef = null;
-            fetch(this.specUrl, { mode: 'cors' })
-                .then(response => {
-                    return response.text();
-                })
-                .then(text => {
-                    this.specDef = JSON.parse(text);
-                })
-                .catch(error => {
-                    alert('Request failed' + error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-        definition(path: string) {
-            const parts = path.split('/');
-            const name = parts[parts.length - 1];
-            return (this.spec.definitions as any)[name];
-        },
-        propertyType(prop: string[]) {
-            const type = prop[prop.length - 1];
-            const nullable = prop[0] == 'null';
-
-            return `${type}${nullable ? '!' : ''}`;
-        }
+  },
+  created() {
+    if (window.baseURL) {
+      this.baseURL = window.baseURL;
+      this.loadSpec();
+    } else {
+      this.specDef = spec;
     }
+
+    return true;
+  },
+  methods: {
+    loadSpec() {
+      this.loading = true;
+      this.specDef = null;
+      fetch(this.specUrl, { mode: 'cors' })
+        .then((response) => {
+          return response.text();
+        })
+        .then((text) => {
+          this.specDef = JSON.parse(text);
+        })
+        .catch((error) => {
+          alert('Request failed' + error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    definition(path: string) {
+      const parts = path.split('/');
+      const name = parts[parts.length - 1];
+      return (this.spec.definitions as any)[name];
+    },
+    propertyType(prop: string[]) {
+      const type = prop[prop.length - 1];
+      const nullable = prop[0] == 'null';
+
+      return `${type}${nullable ? '!' : ''}`;
+    },
+  },
 });
 </script>
 
 <style>
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .title {
-    margin: 0;
+  margin: 0;
 }
 .swagger-ui .btn.success__btn {
-    color: #49cc90;
-    border-color: #49cc90;
+  color: #49cc90;
+  border-color: #49cc90;
 }
 .swagger-ui .btn.danger__btn {
-    border-color: #ff6060;
-    color: #ff6060;
+  border-color: #ff6060;
+  color: #ff6060;
 }
 </style>

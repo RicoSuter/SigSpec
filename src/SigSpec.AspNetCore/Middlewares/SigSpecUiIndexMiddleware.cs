@@ -12,10 +12,10 @@ namespace SigSpec.AspNetCore.Middlewares
     {
         private readonly RequestDelegate _nextDelegate;
         private readonly string _indexPath;
-        private readonly SigSpecSettings _settings;
+        private readonly SigSpecUiSettings _settings;
         private readonly string _resourcePath;
 
-        public SwaggerUiIndexMiddleware(RequestDelegate nextDelegate, string indexPath, SigSpecSettings settings, string resourcePath)
+        public SwaggerUiIndexMiddleware(RequestDelegate nextDelegate, string indexPath, SigSpecUiSettings settings, string resourcePath)
         {
             _nextDelegate = nextDelegate;
             _indexPath = indexPath;
