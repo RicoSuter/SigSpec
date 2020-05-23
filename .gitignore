@@ -7,3 +7,6 @@
 src/SigSpec.AspNetCore/SigSpecUI/*.js
 src/SigSpec.AspNetCore/SigSpecUI/*.css
 src/SigSpec.AspNetCore/SigSpecUI/*.js.map
+*.sqlite
+.vs/VSWorkspaceState.json
+.vs/SigSpec/v16/.suo
