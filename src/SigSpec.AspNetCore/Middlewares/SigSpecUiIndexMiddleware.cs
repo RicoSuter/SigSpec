@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace SigSpec.AspNetCore.Middlewares
 {
-    internal class SwaggerUiIndexMiddleware
+    internal class SigSpecUIIndexMiddleware
     {
         private readonly RequestDelegate _nextDelegate;
         private readonly string _indexPath;
         private readonly SigSpecUiSettings _settings;
         private readonly string _resourcePath;
 
-        public SwaggerUiIndexMiddleware(RequestDelegate nextDelegate, string indexPath, SigSpecUiSettings settings, string resourcePath)
+        public SigSpecUIIndexMiddleware(RequestDelegate nextDelegate, string indexPath, SigSpecUiSettings settings, string resourcePath)
         {
             _nextDelegate = nextDelegate;
             _indexPath = indexPath;
@@ -27,7 +27,7 @@ namespace SigSpec.AspNetCore.Middlewares
         {
             if (context.Request.Path.HasValue && string.Equals(context.Request.Path.Value.Trim('/'), _indexPath.Trim('/'), StringComparison.OrdinalIgnoreCase))
             {
-                var stream = typeof(SwaggerUiIndexMiddleware).GetTypeInfo().Assembly.GetManifestResourceStream(_resourcePath);
+                var stream = typeof(SigSpecUIIndexMiddleware).GetTypeInfo().Assembly.GetManifestResourceStream(_resourcePath);
                 using (var reader = new StreamReader(stream))
                 {
                     context.Response.Headers["Content-Type"] = "text/html; charset=utf-8";

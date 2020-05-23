@@ -62,6 +62,9 @@
     <Folder Include="tests\unit\" />
   </ItemGroup>
   <PropertyGroup>
+    <PreBuildEvent>
+      npm install
+    </PreBuildEvent>
     <PostBuildEvent>
       npm run build
     </PostBuildEvent>
