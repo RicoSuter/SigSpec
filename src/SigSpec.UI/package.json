@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "postbuild": "cd .. && copyfiles SigSpec.UI/dist/**/*.* -u 1  -a -f -e **/*.html -V SigSpec.AspNetCore/SigSpecUi",
+    "postbuild": "cd .. && copyfiles SigSpec.UI/dist/**/*.* -u 1  -a -f -e **/*.html SigSpec.AspNetCore/SigSpecUi",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"

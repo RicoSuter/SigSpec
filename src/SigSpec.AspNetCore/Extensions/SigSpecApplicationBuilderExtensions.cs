@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.Builder
             configure?.Invoke(settings);
 
             // TODO: Inject URLs and document names from registered documents into index.html => and then JS
-            app.UseMiddleware<SwaggerUiIndexMiddleware>($"{settings.Route}/index.html", settings,
+            app.UseMiddleware<SigSpecUIIndexMiddleware>($"{settings.Route}/index.html", settings,
                 "SigSpec.AspNetCore.SigSpecUi.index.html");
 
             app.UseFileServer(new FileServerOptions
