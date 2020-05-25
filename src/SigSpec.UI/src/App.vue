@@ -23,7 +23,7 @@
     </div>
     <div class="wrapper">
       <section class="block col-12 block-desktop col-12-desktop">
-        <hub :key="hub.name" v-for="hub in spec.hubs" :hub="hub" :definitions="spec.definitions" :baseURL="baseURL" />
+        <hub :key="hub.name" v-for="hub in spec.hubs" :hub="hub" :definitions="spec.definitions" />
 
         <section class="models is-open">
           <h4>
@@ -41,28 +41,20 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import spec from './testdata.json';
 import Hub from '@/components/Hub.vue';
 import Definition from '@/components/Definition.vue';
 import { Spec, specBuilder } from './models/Spec';
-
-declare global {
-  interface Window {
-    baseURL: string;
-  }
-}
 
 export default Vue.extend({
   name: 'App',
   components: {
     Hub,
-    Definition,
+    Definition
   },
   data() {
     return {
       specDef: null as Record<string, any> | null,
-      baseURL: null as string | null,
-      loading: false,
+      loading: false
     };
   },
   computed: {
@@ -73,31 +65,24 @@ export default Vue.extend({
       return { hubs: [], definitions: [] };
     },
     specUrl(): string {
-      return this.baseURL + 'sigspec/v1/sigspec.json';
-    },
+      return this.$settings.baseUrl + `${this.$settings.route}/v1/sigspec.json`;
+    }
   },
   created() {
-    if (window.baseURL) {
-      this.baseURL = window.baseURL;
-      this.loadSpec();
-    } else {
-      this.specDef = spec;
-    }
-
-    return true;
+    this.loadSpec();
   },
   methods: {
     loadSpec() {
       this.loading = true;
       this.specDef = null;
       fetch(this.specUrl, { mode: 'cors' })
-        .then((response) => {
+        .then(response => {
           return response.text();
         })
-        .then((text) => {
+        .then(text => {
           this.specDef = JSON.parse(text);
         })
-        .catch((error) => {
+        .catch(error => {
           alert('Request failed' + error);
         })
         .finally(() => {
@@ -114,8 +99,8 @@ export default Vue.extend({
       const nullable = prop[0] == 'null';
 
       return `${type}${nullable ? '!' : ''}`;
-    },
-  },
+    }
+  }
 });
 </script>
 

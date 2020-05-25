@@ -20,9 +20,6 @@
             <div class="tab-header">
               <h4 class="opblock-title">Parameters</h4>
             </div>
-            <div class="try-out">
-              <button class="btn try-out__btn">Try it out</button>
-            </div>
           </div>
           <div class="parameters-container">
             <div class="table-container">
@@ -42,13 +39,12 @@
                       </div>
                       <div class="parameter__type"></div>
                       <div class="parameter__deprecated"></div>
-                      <div class="parameter__in">( path )</div>
+                      <div class="parameter__in">( {{ param.type || definition(param.oneOf[0].$ref).name }} )</div>
                     </td>
                     <td class="parameters-col_description">
                       {{ param.description }}
                       <div v-if="param.type">
                         <input type="text" v-model="param.value" />
-                        {{ param.type }}
                       </div>
                       <div v-else-if="param.oneOf">
                         <definition-editor v-model="param.value" :definition="definition(param.oneOf[0].$ref)" />
@@ -62,6 +58,7 @@
         </div>
         <div class="execute-wrapper">
           <button @click="send" class="btn execute opblock-control__btn">Execute</button>
+          <div v-if="sending" class="loading-container"><div class="loading"></div></div>
         </div>
       </div>
     </div>
@@ -92,16 +89,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      open: false
+      open: false,
+      sending: false
     };
   },
   methods: {
-    definition(path: string): Definition | undefined {
+    definition(path: string): Definition {
       const parts = path.split('/');
       const name = parts[parts.length - 1];
-      return this.definitions.find(d => d.name == name);
+      return this.definitions.find(d => d.name == name)!;
     },
-    send() {
+    async send() {
+      this.sending = true;
       const params = this.operation.parameters.map(p => {
         if (p.type) {
           return p.value;
@@ -109,7 +108,8 @@ export default Vue.extend({
           return JSON.parse(p.value);
         }
       });
-      this.connection.invoke(this.operation.name, ...params);
+      await this.connection.invoke(this.operation.name, ...params);
+      this.sending = false;
     }
   }
 });

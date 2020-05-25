@@ -54,16 +54,12 @@ export default Vue.extend({
     definitions: {
       type: Array as () => Definition[],
       required: true
-    },
-    baseURL: {
-      type: String,
-      required: true
     }
   },
   methods: {
     connect() {
       this.connection = new HubConnectionBuilder()
-        .withUrl(`${this.baseURL}${this.hub.name.replace('hub', '')}`)
+        .withUrl(`${this.$settings.baseUrl}/${this.hub.name.replace('hub', '')}`)
         .withAutomaticReconnect()
         .build();
 
@@ -73,15 +69,6 @@ export default Vue.extend({
   computed: {
     connectionStatus(): HubConnectionState {
       return this.connection.state;
-      /* const state = this.connection.state
-      if (state == HubConnectionState.Connected) {
-        return 'connected'
-      }
-      if (state == HubConnectionState.Reconnecting || state == HubConnectionState.Connecting) {
-        return 'retrying'
-      }
-
-      return 'failed' */
     }
   }
 });
