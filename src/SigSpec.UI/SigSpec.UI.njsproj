@@ -43,7 +43,6 @@
   <ItemGroup>
     <Content Include="src\**\*.*" />
     <Content Include="public\**\*.*" />
-    <Content Include="tests\**\*.*" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="babel.config.js" />
@@ -54,12 +53,6 @@
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
     <Folder Include="src\models\" />
-    <Folder Include="tests\" />
-    <Folder Include="tests\e2e\" />
-    <Folder Include="tests\e2e\plugins\" />
-    <Folder Include="tests\e2e\specs\" />
-    <Folder Include="tests\e2e\support\" />
-    <Folder Include="tests\unit\" />
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent>
