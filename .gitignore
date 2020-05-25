@@ -4,9 +4,9 @@
 /src/New folder
 **/*.user
 
-src/SigSpec.AspNetCore/SigSpecUI/*.js
-src/SigSpec.AspNetCore/SigSpecUI/*.css
-src/SigSpec.AspNetCore/SigSpecUI/*.js.map
+src/SigSpec.AspNetCore/SigSpecUi/*.js
+src/SigSpec.AspNetCore/SigSpecUi/*.css
+src/SigSpec.AspNetCore/SigSpecUi/*.js.map
 *.sqlite
 .vs/VSWorkspaceState.json
 .vs/SigSpec/v16/.suo

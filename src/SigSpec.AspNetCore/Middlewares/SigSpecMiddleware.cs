@@ -37,7 +37,6 @@ namespace SigSpec.AspNetCore.Middlewares
             else
             {
                 await _next(httpContext);
-                return;
             }
         }
 

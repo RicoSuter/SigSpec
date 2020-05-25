@@ -11,8 +11,7 @@ namespace HelloSignalR
             services.AddSignalR();
 
             // TODO: Automatically look hubs up
-            services.AddSigSpecDocument(o => o.Hubs["/chat"] = typeof(ChatHub));
-
+            services.AddSigSpecDocument(o => o.Hubs["chat"] = typeof(ChatHub));
             services.AddCors(c =>
             {
                 c.AddDefaultPolicy(policy =>

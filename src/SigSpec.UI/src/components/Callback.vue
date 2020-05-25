@@ -1,11 +1,9 @@
 <template>
-  <div class="opblock opblock-get" :class="{ 'is-open': open }" id="operations-pet-uploadFile">
+  <div class="opblock opblock-get" :class="{ 'is-open': open }">
     <div @click="open = !open" class="opblock-summary opblock-summary-get">
       <span class="opblock-summary-method">Callback</span>
-      <span class="opblock-summary-path" data-path="/pet/{petId}">
-        <a class="nostyle" href="#/pet/getPetById">
-          <span>{{ callback.name }}</span>
-        </a>
+      <span class="opblock-summary-path">
+        <span>{{ callback.name }}</span>
       </span>
       <div class="opblock-summary-description">{{ callback.description }}</div>
       <button class="authorization__btn unlocked" aria-label="authorization button unlocked">
@@ -19,7 +17,7 @@
         <div class="opblock-description-wrapper">
           <div class="opblock-description">
             <div class="markdown">
-              <p>{{callback.description}}</p>
+              <p>{{ callback.description }}</p>
             </div>
           </div>
         </div>
@@ -83,63 +81,63 @@ import { Callback, Definition } from '../models/Spec';
 import { HubConnection } from '@microsoft/signalr';
 
 export default Vue.extend({
-    props: {
-        callback: {
-            type: Object as () => Callback,
-            required: true
-        },
-        definitions: {
-            type: Array as () => Definition[],
-            required: true
-        },
-        connection: {
-            type: Object as () => HubConnection,
-            required: true
-        }
+  props: {
+    callback: {
+      type: Object as () => Callback,
+      required: true
     },
-    data() {
-        return {
-            open: false,
-            callbackMessages: [] as {
-                timeStamp: Date;
-                params: Record<string, any>;
-            }[],
-            listening: false
-        };
+    definitions: {
+      type: Array as () => Definition[],
+      required: true
     },
-    created() {
-        this.startListening();
-    },
-    methods: {
-        definition(path: string): Definition | undefined {
-            const parts = path.split('/');
-            const name = parts[parts.length - 1];
-            return this.definitions.find(d => d.name == name);
-        },
-        listenerHandler(...args: Record<string, any>[]) {
-            this.callbackMessages.push({
-                timeStamp: new Date(Date.now()),
-                params: this.callback.parameters.map((p, i) => ({
-                    [p.name]: args[i]
-                }))
-            });
-        },
-        startListening() {
-            this.listening = true;
-            this.connection.on(this.callback.name, this.listenerHandler);
-        },
-        stopListening() {
-            this.listening = false;
-            this.connection.off(this.callback.name, this.listenerHandler);
-        }
+    connection: {
+      type: Object as () => HubConnection,
+      required: true
     }
+  },
+  data() {
+    return {
+      open: false,
+      callbackMessages: [] as {
+        timeStamp: Date;
+        params: Record<string, any>;
+      }[],
+      listening: false
+    };
+  },
+  created() {
+    this.startListening();
+  },
+  methods: {
+    definition(path: string): Definition | undefined {
+      const parts = path.split('/');
+      const name = parts[parts.length - 1];
+      return this.definitions.find(d => d.name == name);
+    },
+    listenerHandler(...args: Record<string, any>[]) {
+      this.callbackMessages.push({
+        timeStamp: new Date(Date.now()),
+        params: this.callback.parameters.map((p, i) => ({
+          [p.name]: args[i]
+        }))
+      });
+    },
+    startListening() {
+      this.listening = true;
+      this.connection.on(this.callback.name, this.listenerHandler);
+    },
+    stopListening() {
+      this.listening = false;
+      this.connection.off(this.callback.name, this.listenerHandler);
+    }
+  }
 });
 </script>
 
 <style>
 .swagger-ui.sigspec-ui .opblock-body pre.microlight {
-    width: 80%;
-    margin-left: 10%;
-    margin-bottom: 20px;
+  width: 80%;
+  margin-left: 10%;
+  margin-bottom: 20px;
 }
 </style>

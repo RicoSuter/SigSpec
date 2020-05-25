@@ -1,11 +1,9 @@
 <template>
-  <div class="opblock opblock-post" :class="{ 'is-open': open }" id="operations-pet-uploadFile">
+  <div class="opblock opblock-post" :class="{ 'is-open': open }">
     <div class="opblock-summary opblock-summary-post" @click="open = !open">
       <span class="opblock-summary-method">Operation</span>
-      <span class="opblock-summary-path" data-path="/pet/{petId}/uploadImage">
-        <a class="nostyle" href="#/pet/uploadFile">
-          <span>{{ operation.name }}</span>
-        </a>
+      <span class="opblock-summary-path">
+        <span>{{ operation.name }}</span>
       </span>
       <div class="opblock-summary-description">{{ operation.description }}</div>
       <button class="authorization__btn unlocked" aria-label="authorization button unlocked">
@@ -36,7 +34,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr :key="param.name" v-for="param in operation.parameters" data-param-name="petId" data-param-in="path">
+                  <tr :key="param.name" v-for="param in operation.parameters">
                     <td class="parameters-col_name">
                       <div class="parameter__name required">
                         {{ param.name }}
@@ -76,44 +74,44 @@ import DefinitionEditor from '@/components/DefinitionEditor.vue';
 import { Operation, Definition } from '@/models/Spec';
 import { HubConnection } from '@microsoft/signalr';
 export default Vue.extend({
-    components: {
-        DefinitionEditor
+  components: {
+    DefinitionEditor
+  },
+  props: {
+    operation: {
+      type: Object as () => Operation
     },
-    props: {
-        operation: {
-            type: Object as () => Operation
-        },
-        definitions: {
-            type: Array as () => Definition[],
-            required: true
-        },
-        connection: {
-            type: Object as () => HubConnection,
-            required: true
-        }
+    definitions: {
+      type: Array as () => Definition[],
+      required: true
     },
-    data() {
-        return {
-            open: false
-        };
-    },
-    methods: {
-        definition(path: string): Definition | undefined {
-            const parts = path.split('/');
-            const name = parts[parts.length - 1];
-            return this.definitions.find(d => d.name == name);
-        },
-        send() {
-            const params = this.operation.parameters.map(p => {
-                if (p.type) {
-                    return p.value;
-                } else if (p.oneOf) {
-                    return JSON.parse(p.value);
-                }
-            });
-            this.connection.invoke(this.operation.name, ...params);
-        }
+    connection: {
+      type: Object as () => HubConnection,
+      required: true
     }
+  },
+  data() {
+    return {
+      open: false
+    };
+  },
+  methods: {
+    definition(path: string): Definition | undefined {
+      const parts = path.split('/');
+      const name = parts[parts.length - 1];
+      return this.definitions.find(d => d.name == name);
+    },
+    send() {
+      const params = this.operation.parameters.map(p => {
+        if (p.type) {
+          return p.value;
+        } else if (p.oneOf) {
+          return JSON.parse(p.value);
+        }
+      });
+      this.connection.invoke(this.operation.name, ...params);
+    }
+  }
 });
 </script>
 
