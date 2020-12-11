@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SigSpec.CodeGeneration.CSharp\SigSpec.CodeGeneration.CSharp.csproj" />
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
     <ProjectReference Include="..\HelloSignalR\HelloSignalR.csproj" />
     <ProjectReference Include="..\SigSpec.CodeGeneration.TypeScript\SigSpec.CodeGeneration.TypeScript.csproj" />
