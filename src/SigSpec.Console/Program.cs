@@ -4,6 +4,8 @@ using SigSpec.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SigSpec.CodeGeneration;
+using SigSpec.CodeGeneration.CSharp;
 
 namespace SigSpec
 {
@@ -32,8 +34,10 @@ namespace SigSpec
             Console.WriteLine(json);
             Console.ReadKey();
 
-            var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
-            var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
+            //var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
+            //var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
+            var codeGeneratorSettings = new SigSpecToCSharpGeneratorSettings();
+            var codeGenerator = new SigSpecToCSharpGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateFile(document);
 
             Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
