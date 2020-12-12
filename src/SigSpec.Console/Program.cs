@@ -30,9 +30,9 @@ namespace SigSpec
 
             var json = document.ToJson();
 
-            Console.WriteLine("\nGenerated SigSpec document:");
-            Console.WriteLine(json);
-            Console.ReadKey();
+            //Console.WriteLine("\nGenerated SigSpec document:");
+            //Console.WriteLine(json);
+            //Console.ReadKey();
 
             //var codeGeneratorSettings = new SigSpecToTypeScriptGeneratorSettings();
             //var codeGenerator = new SigSpecToTypeScriptGenerator(codeGeneratorSettings);
@@ -40,7 +40,8 @@ namespace SigSpec
             var codeGenerator = new SigSpecToCSharpGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateFile(document);
 
-            Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
+            //Console.WriteLine("\n\nGenerated SigSpec TypeScript code:");
+            Console.WriteLine("\n\nGenerated SigSpec CSharp code:");
             Console.WriteLine(file);
             Console.ReadKey();
         }
