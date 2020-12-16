@@ -20,7 +20,6 @@ namespace SigSpec.CodeGeneration.CSharp
         public IEnumerable<CodeArtifact> GenerateArtifacts(SigSpecDocument document)
         {
             var resolver = new CSharpTypeResolver(_settings.CSharpGeneratorSettings);
-            //var resolver = new TypeScriptTypeResolver(_settings.TypeScriptGeneratorSettings);
             resolver.RegisterSchemaDefinitions(document.Definitions);
 
             var artifacts = new List<CodeArtifact>();
@@ -40,16 +39,15 @@ namespace SigSpec.CodeGeneration.CSharp
             else
             {
                 var generator = new CSharpGenerator(document, _settings.CSharpGeneratorSettings, resolver);
-                //var extensionCode = new TypeScriptExtensionCode(_settings.TypeScriptGeneratorSettings.ExtensionCode, _settings.TypeScriptGeneratorSettings.ExtendedClasses);
                 return artifacts.Concat(generator.GenerateTypes());
             }
         }
 
-        public string GenerateFile(SigSpecDocument document)
+        public string GenerateClients(SigSpecDocument document)
         {
             var artifacts = GenerateArtifacts(document);
 
-            var fileModel = new FileModel(artifacts.Select(a => a.Code));
+            var fileModel = new FileModel(artifacts.Select(a => a.Code), _settings.CSharpGeneratorSettings.Namespace);
             var fileTemplate = _settings.CSharpGeneratorSettings.TemplateFactory.CreateTemplate("CSharp", "File", fileModel);
 
             return fileTemplate.Render();

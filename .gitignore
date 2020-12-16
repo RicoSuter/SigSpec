@@ -8,3 +8,5 @@
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+# Jetbrains Rider
+.idea/
