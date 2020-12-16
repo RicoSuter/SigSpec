@@ -1,10 +1,10 @@
-﻿namespace {{ namespace }}
+﻿namespace {{ Namespace }}
 {
-    using using System.Threading.Tasks;
+    using System.Threading.Tasks;
     using System;
     using Microsoft.AspNetCore.SignalR.Client;
 
     {% for hub in Hubs -%}
-    {{ hub }}
+{{ hub }}
     {% endfor -%}
 }

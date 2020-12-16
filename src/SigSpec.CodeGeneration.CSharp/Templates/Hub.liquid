@@ -1,64 +1,51 @@
-﻿public class {{ Name }}Hub {
+﻿public class {{ Name }}HubClient {
     private readonly HubConnection _connection;
    
-    public {{Name}}Hub(HubConnection connection) {
+    public {{Name}}HubClient(HubConnection connection) {
         _connection = connection;
     }
+{% comment %}
 {% for operation in Operations -%}
 
-{%     if operation.IsObservable -%}
+{% if operation.IsObservable -%}
     public IStreamResult<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
     {
-        return _connection.stream("{{ operation.Name }}", {% for parameter in operation.Parameters %} {{parameter.Type}} {{ parameter.Name }}{% endfor %});
+        return _connection.Stream("{{ operation.Name }}"{% for parameter in operation.Parameters %}{% if forloop.last == false %}, {% endif %}{{parameter.Type}} {{ parameter.Name }}{% endfor %});
     }
-    {% comment %} {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): IStreamResult<{{ operation.ReturnType.Type }}> {
-        return this.connection.stream('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    } {% endcomment %}
 {%     elseif operation.HasReturnType -%}
     public Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
     {
         return _connection.Invoke("{{ operation.Name }}", {% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
     }
-    {% comment %} {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): Promise<{{ operation.ReturnType.Type }}> {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    } {% endcomment %}
 {%     else -%}
-    public Task {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
+    public Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
     {
         return _connection.Invoke("{{ operation.Name }}", {% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
     }
-    {% comment %} {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): Promise<void> {
-        return this.connection.invoke('{{ operation.Name }}'{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    } {% endcomment %}
 {%     endif -%}
 {% endfor -%}
+{% endcomment %}
 
 {% for operation in Callbacks -%}
-public delegate Task {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
-public IDisposable RegisterFor{{ operation.Name }}({{ operation.Name }} callback)
-{
-    {% if operation.Parameters.size == 0 %}
-    return _connection.On("{{ operation.Name }}", callback.Invoke);
-    {% else %}
-    return _connection.On<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}>("{{ operation.Name }}", callback.Invoke);
-    {% endif %}
-}
-{% endfor -%}
-    {% comment %} registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
-{% for operation in Callbacks -%}
-        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
-{% endfor -%}
-    } {% endcomment %}
-
-    {% comment %} unregisterCallbacks(implementation: I{{ Name }}HubCallbacks) {
-{% for operation in Callbacks -%}
-        this.connection.off('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
-{% endfor -%} {% endcomment %}
+    public delegate Task On{{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+{% if operation.Parameters.size == 0 %}
+    public IDisposable RegisterFor{{ operation.Name }}(On{{ operation.Name }} callback)
+    {
+        return _connection.On("{{ operation.Name }}", callback.Invoke);
     }
-}
-
-export interface I{{ Name }}HubCallbacks {
-{% for operation in Callbacks -%}
-    {{ operation.MethodName }}({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}): void;
+    public IDisposable RegisterFor{{ operation.Name }}(Action callback)
+    {
+        return _connection.On("{{ operation.Name }}", callback);
+    }
+{% else %}
+    public IDisposable RegisterFor{{ operation.Name }}(On{{ operation.Name }} callback)
+    {
+        return _connection.On<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}>("{{ operation.Name }}", callback.Invoke);
+    }
+    public IDisposable RegisterFor{{ operation.Name }}(Action<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}> callback)
+    {
+        return _connection.On("{{ operation.Name }}", callback);
+    }
+{% endif %}
 {% endfor -%}
 }
