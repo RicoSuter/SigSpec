@@ -4,28 +4,6 @@
     public {{Name}}HubClient(HubConnection connection) {
         _connection = connection;
     }
-{% comment %}
-{% for operation in Operations -%}
-
-{% if operation.IsObservable -%}
-    public IStreamResult<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
-    {
-        return _connection.Stream("{{ operation.Name }}"{% for parameter in operation.Parameters %}{% if forloop.last == false %}, {% endif %}{{parameter.Type}} {{ parameter.Name }}{% endfor %});
-    }
-{%     elseif operation.HasReturnType -%}
-    public Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %} {{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
-    {
-        return _connection.Invoke("{{ operation.Name }}", {% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
-    }
-{%     else -%}
-    public Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
-    {
-        return _connection.Invoke("{{ operation.Name }}", {% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
-    }
-{%     endif -%}
-{% endfor -%}
-{% endcomment %}
-
 {% for operation in Callbacks -%}
     public delegate Task On{{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
 {% if operation.Parameters.size == 0 %}
@@ -33,7 +11,7 @@
     {
         return _connection.On("{{ operation.Name }}", callback.Invoke);
     }
-    public IDisposable RegisterFor{{ operation.Name }}(Action callback)
+    public IDisposable RegisterFor{{ operation.Name }}(Func<Task> callback)
     {
         return _connection.On("{{ operation.Name }}", callback);
     }
@@ -42,7 +20,7 @@
     {
         return _connection.On<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}>("{{ operation.Name }}", callback.Invoke);
     }
-    public IDisposable RegisterFor{{ operation.Name }}(Action<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}> callback)
+    public IDisposable RegisterFor{{ operation.Name }}(Func<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}, Task> callback)
     {
         return _connection.On("{{ operation.Name }}", callback);
     }
