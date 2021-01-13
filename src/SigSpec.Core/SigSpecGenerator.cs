@@ -109,7 +109,7 @@ namespace SigSpec.Core
                 Type = operationType
             };
 
-            foreach (var arg in method.GetParameters())
+            foreach (var arg in method.GetParameters().Where(param => param.ParameterType != typeof(CancellationToken)))
             {
                 var parameter = generator.GenerateWithReferenceAndNullability<SigSpecParameter>(
                     arg.ParameterType.ToContextualType(), arg.ParameterType.ToContextualType().IsNullableType, resolver, (p, s) =>
