@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Namotion.Reflection;
@@ -109,7 +110,7 @@ namespace SigSpec.Core
                 Type = operationType
             };
 
-            foreach (var arg in method.GetParameters())
+            foreach (var arg in method.GetParameters().Where(param => param.ParameterType != typeof(CancellationToken)))
             {
                 var parameter = generator.GenerateWithReferenceAndNullability<SigSpecParameter>(
                     arg.ParameterType.ToContextualType(), arg.ParameterType.ToContextualType().IsNullableType, resolver, (p, s) =>
