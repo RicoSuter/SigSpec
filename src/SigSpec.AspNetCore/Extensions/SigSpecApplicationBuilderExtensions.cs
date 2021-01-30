@@ -25,18 +25,21 @@ namespace Microsoft.AspNetCore.Builder
             return app;
         }
 
-        public static IApplicationBuilder UseSigSpecUi(this IApplicationBuilder app, Action<SigSpecUiSettings> configure = null)
+        public static IApplicationBuilder UseSigSpecUi(this IApplicationBuilder app,
+            Action<SigSpecUiSettings> configure = null)
         {
             var settings = new SigSpecUiSettings();
             configure?.Invoke(settings);
 
-            // TODO: Redirect /sigspec to /sigspec/index.html
             // TODO: Inject URLs and document names from registered documents into index.html => and then JS
+            app.UseMiddleware<SigSpecUIIndexMiddleware>($"{settings.Route}/index.html", settings,
+                "SigSpec.AspNetCore.SigSpecUi.index.html");
 
             app.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(settings.Route),
-                FileProvider = new EmbeddedFileProvider(typeof(SigSpecApplicationBuilderExtensions).GetTypeInfo().Assembly, "SigSpec.AspNetCore.SigSpecUi")
+                FileProvider = new EmbeddedFileProvider(
+                    typeof(SigSpecApplicationBuilderExtensions).GetTypeInfo().Assembly, "SigSpec.AspNetCore.SigSpecUi")
             });
 
             return app;

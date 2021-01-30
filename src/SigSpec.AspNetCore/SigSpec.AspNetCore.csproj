@@ -14,10 +14,7 @@
     <PackageTags>SignalR Specification CodeGeneration</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="SigSpecUi\index.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="SigSpecUi\index.html" />
+    <EmbeddedResource Include="SigSpecUi\**\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

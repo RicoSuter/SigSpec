@@ -3,3 +3,10 @@
 /src/**/bin
 /src/New folder
 **/*.user
+
+src/SigSpec.AspNetCore/SigSpecUi/*.js
+src/SigSpec.AspNetCore/SigSpecUi/*.css
+src/SigSpec.AspNetCore/SigSpecUi/*.js.map
+*.sqlite
+.vs/VSWorkspaceState.json
+.vs/SigSpec/v16/.suo
