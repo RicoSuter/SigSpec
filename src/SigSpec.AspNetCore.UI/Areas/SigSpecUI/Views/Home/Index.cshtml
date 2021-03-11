@@ -1,0 +1,312 @@
+﻿@model SigSpec.AspNetCore.UI.MyFeature.Pages.Page1Model
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>SignalR - test page</title>
+    <link href="~/sigspecui/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#563d7c">
+</head>
+<body>
+
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">Add-on for SignalR spec generator. Allows to test your hub. On connection automatically subscribes to all hub to client messages. Written with JQuery, Bootstrap, Mustache.js and Bootstrap-notify libraries.</p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                            <li><a href="#" class="text-white">Like on Facebook</a></li>
+                            <li><a href="#" class="text-white">Email me</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <strong>SignalR definition and test page</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <section class="pt-5">
+            <div class="container-fluid">
+                <div id="def"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+            <p>SignalR test</p>
+        </div>
+    </footer>
+    <script type="text/HTML" id="hub-template">
+        {{#hubs}}
+        <div class="card border-0 mb-3">
+            <div class="card-body">
+                <h5 class="card-header d-flex justify-content-between align-items-center">
+                    Hub - {{name}}
+                    <button type="button" data-def="{{def}}" class="btn btn-sm btn-outline-primary btn-connect hub-{{name}}">connect</button>
+                    <button type="button" data-hub="{{name}}" class="btn btn-sm btn-outline-danger btn-disconnect hub-{{name}} d-none">disconnect</button>
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{description}}</h6>
+                <p class="card-text">
+                    To build the connection use:
+                    <pre class="bg-light"><code>var connection = new signalR.HubConnectionBuilder()
+    .withUrl("{{url}}")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+</code></pre>
+                </p>
+                {{#operations}}
+                <div class="card border-0 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-header text-primary d-flex justify-content-between align-items-center">
+                            Operation - {{opName}}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{description}}</h6>
+                        <p class="card-text">
+                            Usage:
+                            <pre class="bg-light">await connection.invoke("{{opName}}"{{#buildParams.length}},{{/buildParams.length}}{{buildParams}});<code>
+                    </code></pre>
+                        </p>
+                        <form data-operation="{{opName}}" data-hub="{{name}}">
+                            {{#parameters}}
+                            <div class="form-group">
+                                <label for="{{paramName}}">{{paramName}}</label>
+                                <textarea class="form-control" name="{{paramName}}" data-type="{{type}}" id="{{paramName}}" rows="3">{{sample}}</textarea>
+                                <small class="form-text text-muted">
+                                    {{description}}
+                                </small>
+                            </div>
+                            {{/parameters}}
+                            <button type="submit" class="btn btn-outline-primary hub-{{name}}" disabled="disabled">Try it</button>
+                        </form>
+                    </div>
+                </div>
+                {{/operations}}
+            </div>
+
+        </div>
+
+        {{/hubs}}
+    </script>
+
+    <script src="~/sigspecui/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/sigspecui/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/sigspecui/lib/mustache.js/mustache.min.js"></script>
+    <script src="~/sigspecui/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <script src="~/signspecui/lib/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+    function rewriteConsoleFunction(method) {
+        console['html-' + method] = console[method];
+        console[method] = function() {
+            console['html-' + method].apply(null, arguments);
+            var finalMsg, msgPart, i;
+
+            finalMsg = "";
+            for (i = 0; i < arguments.length; i++) {
+                msgPart = arguments[i] + ""; // "safe toString()" (works with null & undefined)
+                if (isObject(msgPart)) {
+                    try {
+                        msgPart = "Object " + JSON.stringify(arguments[i]);
+                    } catch (e) {
+
+                    }
+                }
+
+                finalMsg += (i > 0 ? " " : "") + msgPart;
+            }
+            //finalMsg = "[" + (new Date()).toLocaleTimeString() + "] " + finalMsg;
+            $.notify({
+                message: finalMsg,
+                type: method === 'error' ? 'danger' : method === 'warn' ? 'warning' : "info"
+        });
+        }
+    }
+    function isObject(objValue) {
+        return objValue && typeof objValue === 'object' && objValue.constructor === Object;
+    }
+
+    $(document).on("click", "button.btn-disconnect", function(e) {
+            e.preventDefault();
+            var button = $(e.currentTarget);
+            var hubName = button.data("hub");
+            var hub = hubs[hubName];
+            if (hub) {
+                hub.connection.stop();
+                hub = null;
+                button.addClass('d-none');
+                $(`button.btn-connect.hub-${hubName}`).removeClass('d-none');
+                $(`button.hub-${hubName}[type='submit']`).prop("disabled", true);
+            }
+        });
+    $(document).on("click", "button.btn-connect", function(e) {
+        e.preventDefault();
+        var button = $(e.currentTarget);
+        var hub = button.data("def");
+
+
+        if (hubs[hub.name]) {
+            hubs[hub.name].connection.stop();
+            hubs[hub.name] = null;
+        }
+
+        hubs[hub.name] = hub;
+        hub.connection = new signalR.HubConnectionBuilder()
+            .withUrl(hub.url)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        hub.connection.start().then(_ => {
+            button.addClass('d-none');
+            $(`button.btn-disconnect.hub-${hub.name}`).removeClass('d-none');
+            $(`button.hub-${hub.name}[type='submit']`).prop("disabled", false);
+
+            console.info(`SignalR Connected to hub ${hub.name}`);
+            for (var i = 0; i < hub.callbacks.length; i++) {
+                var callback = hub.callbacks[i];
+                subscribeToCallback(callback.callbackName, hub.connection);
+            }
+
+
+
+        }).catch(error => {
+            console.error(error);
+        });
+    });
+    function subscribeToCallback(callbackName, connection) {
+        connection.on(callbackName, function () {
+            console.info.apply(null, [`callback from ${callbackName}:`, ...arguments]);
+        });
+    }
+    $(document).on("submit", "form", function(e){
+        e.preventDefault();
+        var form = $(e.currentTarget);
+        var hubName = form.data("hub");
+        var operationName = form.data("operation");
+
+        var dataToSend = [operationName, ...form.find("textarea").map((i, el) => {
+            el = $(el);
+            var type = el.data('type');
+            if (type === 'object')
+                if (el.val())
+                    return JSON.parse(el.val());
+            return el.val();
+        })];
+
+        hubs[hubName].connection.invoke.apply(hubs[hubName].connection,dataToSend).then(result => {
+            console.info(`${operationName} result:`, result);
+        }).catch(error => {
+            console.error( `${operationName} error:`, error);
+        });
+        return  false;
+    });
+
+    var hubs = {};
+    $(_ => {
+
+        function constructType(typeDefinitions, typeDefinition) {
+            var type = {};
+            Object.keys(typeDefinition.properties).forEach(key => {
+                var prop = typeDefinition.properties[key];
+                var propType = prop.type;
+                if (Array.isArray(prop.type)) {
+                    propType = prop.type[0];
+                    if (propType === 'null')
+                        propType = prop.type[1];//just get first not null type
+                }
+                type[key] = propType;
+            });
+            return type;
+        }
+        $.getJSON("/sigspec/v1/sigspec.json", function (data) {
+            console.log(data);
+
+            var hubs = Object.keys(data.hubs).map(name => {
+                var hub = data.hubs[name];
+                hub.url = name;
+                hub.operations= Object.keys(hub.operations).map(opName => {
+                    var operation = hub.operations[opName];
+                    operation.opName = opName;
+                    operation.buildParams = Object.keys(operation.parameters).toString();
+                    operation.parameters = Object.keys(operation.parameters).map(paramName => {
+                        var parameter = operation.parameters[paramName];
+                        parameter.paramName = paramName;
+                        var paramType = parameter.type;
+                        if (parameter.oneOf) {
+                            if (parameter.oneOf[0].type) {
+                                paramType = parameter.oneOf[0].type;
+                            } else {
+                                var typePath = parameter.oneOf[0].$ref.split('/');
+                                paramType = data[typePath[1]][typePath[2]];
+                            }
+                        }
+                        if (paramType === 'string') {
+                            parameter.sample = parameter.type;
+                        }
+                        if (isObject(paramType)) {
+                            parameter.sample = JSON.stringify(constructType(data.definitions, paramType));
+                            parameter.type = 'object';
+                        }
+
+                        return parameter;
+                    });
+                    return operation;
+                });
+                hub.callbacks = Object.keys(hub.callbacks).map(callbackName => {
+                    var callback = hub.callbacks[callbackName];
+                    callback.callbackName = callbackName;
+                    callback.buildParams = Object.keys(callback.parameters).toString();
+                    callback.parameters = Object.keys(callback.parameters).map(paramName => {
+                        var parameter = callback.parameters[paramName];
+                        parameter.paramName = paramName;
+                        return parameter;
+                    });
+                    return callback;
+                });
+
+                return hub;
+            });
+            var template = $("#hub-template").html();
+
+            for (var i = 0; i < hubs.length; i++)
+                hubs[i].def = JSON.stringify(hubs[i]);
+
+            var rendered = Mustache.render(template, {hubs:hubs});
+            $("#def").html(rendered);
+            console.log(hubs);
+
+
+            rewriteConsoleFunction('info');
+            rewriteConsoleFunction('warn');
+            rewriteConsoleFunction('error');
+        });
+    });
+    </script>
+
+</body>
+</html>

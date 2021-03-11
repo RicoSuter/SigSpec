@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using SigSpec.AspNetCore.UI;
 
 namespace HelloSignalR
 {
@@ -12,7 +14,7 @@ namespace HelloSignalR
 
             // TODO: Automatically look hubs up
             services.AddSigSpecDocument(o => o.Hubs["/chat"] = typeof(ChatHub));
-
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddCors(c =>
             {
                 c.AddDefaultPolicy(policy =>
@@ -23,20 +25,24 @@ namespace HelloSignalR
                         .AllowCredentials();
                 });
             });
+            services.ConfigureOptions(typeof(UIConfigureOptions));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseStaticFiles();
-            app.UseCors();
+            //app.UseCors();
 
             app.UseSigSpec();
-            app.UseSigSpecUi();
-
-            app.UseSignalR(routes =>
+            //app.UseSigSpecUi();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapRazorPages();
+                endpoints.MapAreaControllerRoute("sigSpecui", "sigSpecui","{area}/{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }
