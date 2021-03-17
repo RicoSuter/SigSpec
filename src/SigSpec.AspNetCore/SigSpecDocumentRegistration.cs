@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>A SigSpec _document generator registration.</summary>
-    internal class SigSpecDocumentRegistration
+    public class SigSpecDocumentRegistration
     {
         static SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1,1);
         private SigSpecDocumentGeneratorSettings _settings;

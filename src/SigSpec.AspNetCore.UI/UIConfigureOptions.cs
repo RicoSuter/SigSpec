@@ -11,11 +11,11 @@ namespace SigSpec.AspNetCore.UI
 {
     public class UIConfigureOptions : IPostConfigureOptions<StaticFileOptions>
     {
-        public UIConfigureOptions(IHostingEnvironment environment)
+        public UIConfigureOptions(IWebHostEnvironment environment)
         {
             Environment = environment;
         }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void PostConfigure(string name, StaticFileOptions options)
         {

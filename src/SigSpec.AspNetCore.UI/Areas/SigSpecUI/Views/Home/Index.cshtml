@@ -1,5 +1,4 @@
-﻿@model SigSpec.AspNetCore.UI.MyFeature.Pages.Page1Model
-
+﻿@model List<SelectListItem>
 
 <!doctype html>
 <html lang="en">
@@ -23,14 +22,7 @@
                         <h4 class="text-white">About</h4>
                         <p class="text-muted">Add-on for SignalR spec generator. Allows to test your hub. On connection automatically subscribes to all hub to client messages. Written with JQuery, Bootstrap, Mustache.js and Bootstrap-notify libraries.</p>
                     </div>
-                    <div class="col-sm-4 offset-md-1 py-4">
-                        <h4 class="text-white">Contact</h4>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
-                            <li><a href="#" class="text-white">Like on Facebook</a></li>
-                            <li><a href="#" class="text-white">Email me</a></li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -39,6 +31,17 @@
                 <a href="#" class="navbar-brand d-flex align-items-center">
                     <strong>SignalR definition and test page</strong>
                 </a>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        spec version
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @foreach (var item in Model)
+                        {
+                            <a class="dropdown-item @(item.Selected?"active":"")" href="?ver=@item.Value">@item.Text</a>
+                        }
+                    </div>
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -243,7 +246,7 @@
             });
             return type;
         }
-        $.getJSON("/sigspec/v1/sigspec.json", function (data) {
+        $.getJSON("/sigspec/@Model.First(t=>t.Selected).Value/sigspec.json", function (data) {
             console.log(data);
 
             var hubs = Object.keys(data.hubs).map(name => {

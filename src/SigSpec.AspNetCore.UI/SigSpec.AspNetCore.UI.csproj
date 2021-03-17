@@ -17,6 +17,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
 		<Content Remove="wwwroot\\**\*" />
+		<ProjectReference Include="..\SigSpec.AspNetCore\SigSpec.AspNetCore.csproj" />
 		<Content Update="**\*.cshtml" Pack="false" />
 	</ItemGroup>
 </Project>
