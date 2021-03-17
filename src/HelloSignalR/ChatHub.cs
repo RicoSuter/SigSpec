@@ -19,7 +19,7 @@ namespace HelloSignalR
 
         public Task AddPerson(Person person)
         {
-            return Task.CompletedTask;
+            return Clients.All.Send($"Person added: {person?.FirstName}-{person?.LastName}");
         }
 
         public ChannelReader<Event> GetEvents()
