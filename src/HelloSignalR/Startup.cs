@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace HelloSignalR
 {
@@ -11,7 +14,8 @@ namespace HelloSignalR
             services.AddSignalR();
 
             // TODO: Automatically look hubs up
-            services.AddSigSpecDocument(o => o.Hubs["/chat"] = typeof(ChatHub));
+            var hubs = new List<Type> { typeof(ChatHub) };
+            services.AddSigSpecDocument(o => o.Hubs = new ReadOnlyCollection<Type>(hubs));
 
             services.AddCors(c =>
             {

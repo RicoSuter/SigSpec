@@ -2,7 +2,6 @@
 using SigSpec.CodeGeneration.TypeScript;
 using SigSpec.Core;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SigSpec
@@ -21,10 +20,7 @@ namespace SigSpec
             var generator = new SigSpecGenerator(settings);
 
             // TODO: Add PR to SignalR Core with new IHubDescriptionCollectionProvider service
-            var document = await generator.GenerateForHubsAsync(new Dictionary<string, Type>
-            {
-                { "chat", typeof(ChatHub) }
-            });
+            var document = await generator.GenerateForHubsAsync(typeof(ChatHub));
 
             var json = document.ToJson();
 

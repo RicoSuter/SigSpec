@@ -20,13 +20,13 @@
 
     registerCallbacks(implementation: I{{ Name }}HubCallbacks) {
 {% for operation in Callbacks -%}
-        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.connection.on('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}: {{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
 {% endfor -%}
     }
 
-    unregisterCallbacks(implementation: I{{ Name }}HubCallbacks) {
+    unregisterCallbacks() {
 {% for operation in Callbacks -%}
-        this.connection.off('{{ operation.Name }}', ({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}) => implementation.{{operation.MethodName}}({% for parameter in operation.Parameters %}{{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %}));
+        this.connection.off('{{ operation.Name }}');
 {% endfor -%}
     }
 }
