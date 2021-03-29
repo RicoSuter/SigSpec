@@ -23,13 +23,13 @@ namespace SigSpec.Core
             _settings = settings;
         }
 
-        public SigSpecDocument GenerateForHubs(params Type[] hubs)
+        public async Task<SigSpecDocument> GenerateForHubsAsync(params Type[] hubs)
         {
             var document = new SigSpecDocument();
-            return GenerateForHubs(hubs, document);
+            return await GenerateForHubsAsync(hubs, document);
         }
 
-        public SigSpecDocument GenerateForHubs(IReadOnlyCollection<Type> hubs, SigSpecDocument template)
+        public async Task<SigSpecDocument> GenerateForHubsAsync(IReadOnlyCollection<Type> hubs, SigSpecDocument template)
         {
             var document = template;
             var resolver = new SigSpecSchemaResolver(document, _settings);
@@ -43,13 +43,13 @@ namespace SigSpec.Core
 
                 foreach (var method in GetHubMethods(type))
                 {
-                    var operation = GenerateOperation(method, generator, resolver, SigSpecOperationType.Sync);
+                    var operation = await GenerateOperationAsync(method, generator, resolver, SigSpecOperationType.Sync);
                     hub.Operations[method.Name] = operation;
                 }
 
                 foreach (var method in GetChannelMethods(type))
                 {
-                    hub.Operations[method.Name] = GenerateOperation(method, generator, resolver, SigSpecOperationType.Observable);
+                    hub.Operations[method.Name] = await GenerateOperationAsync(method, generator, resolver, SigSpecOperationType.Observable);
                 }
 
                 var baseTypeGenericArguments = type.BaseType.GetGenericArguments();
@@ -58,7 +58,7 @@ namespace SigSpec.Core
                     var callbackType = baseTypeGenericArguments[0];
                     foreach (var callbackMethod in GetCallbackMethods(callbackType))
                     {
-                        var callback = GenerateOperation(callbackMethod, generator, resolver, SigSpecOperationType.Sync);
+                        var callback = await GenerateOperationAsync(callbackMethod, generator, resolver, SigSpecOperationType.Sync);
                         hub.Callbacks[callbackMethod.Name] = callback;
                     }
                 }
@@ -114,7 +114,7 @@ namespace SigSpec.Core
             return method.ReturnType;
         }
 
-        private SigSpecOperation GenerateOperation(MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
+        private async Task<SigSpecOperation> GenerateOperationAsync(MethodInfo method, JsonSchemaGenerator generator, SigSpecSchemaResolver resolver, SigSpecOperationType operationType)
         {
             var operation = new SigSpecOperation
             {
@@ -139,7 +139,7 @@ namespace SigSpec.Core
             if (operation.ReturnType != null)
             {
                 generator.GenerateWithReferenceAndNullability<JsonSchema>(
-                returnType.ToContextualType(), returnType.ToContextualType().IsNullableType, resolver, (p, s) => 
+                returnType.ToContextualType(), returnType.ToContextualType().IsNullableType, resolver, async (p, s) => 
                     p.Description = method.ReturnType.GetXmlDocsSummary());
             }
             return operation;

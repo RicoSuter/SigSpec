@@ -8,7 +8,7 @@ namespace SigSpec.AspNetCore.Middlewares
     {
         public string DocumentName { get; set; } = "v1";
 
-        public Dictionary<string, Type> Hubs { get; set; } = new Dictionary<string, Type>();
+        public IReadOnlyCollection<Type> Hubs { get; set; }
 
         public SigSpecDocument Template { get; set; } = new SigSpecDocument();
     }
