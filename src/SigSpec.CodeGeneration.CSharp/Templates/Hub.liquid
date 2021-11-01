@@ -11,15 +11,15 @@
 {%     if operation.IsObservable -%}
     {% comment %}For the moment don't handle streams{% endcomment %}
 {%     elseif operation.HasReturnType -%}
-        public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
+        public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
         {
-            return await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+            return await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
         }
 
 {%     else -%}
-        public async Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %})
+        public async Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
         {
-            await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %});
+            await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
         }
 
 {%     endif -%}
