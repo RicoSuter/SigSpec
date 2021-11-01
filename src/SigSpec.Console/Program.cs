@@ -1,11 +1,9 @@
-﻿using HelloSignalR;
-using SigSpec.CodeGeneration.TypeScript;
-using SigSpec.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SigSpec.CodeGeneration;
+using HelloSignalR;
 using SigSpec.CodeGeneration.CSharp;
+using SigSpec.Core;
 
 namespace SigSpec
 {
@@ -34,6 +32,7 @@ namespace SigSpec
             Console.ReadKey();
 
             var codeGeneratorSettings = new SigSpecToCSharpGeneratorSettings();
+            codeGeneratorSettings.GenerateInterface = true;
             var codeGenerator = new SigSpecToCSharpGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateClients(document);
 

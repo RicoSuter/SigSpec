@@ -32,7 +32,7 @@ namespace SigSpec.CodeGeneration.CSharp
 
             if (_settings.GenerateDtoTypes)
             {
-                var generator = new NJsonSchema.CodeGeneration.CSharp.CSharpGenerator(document, _settings.CSharpGeneratorSettings, resolver); //TypeScriptGenerator(document, _settings.TypeScriptGeneratorSettings, resolver);
+                var generator = new CSharpGenerator(document, _settings.CSharpGeneratorSettings, resolver);
                 var types = generator.GenerateTypes();
                 return artifacts.Concat(types);
             }
