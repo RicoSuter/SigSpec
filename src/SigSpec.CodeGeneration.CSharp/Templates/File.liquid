@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace {{ Namespace }}
 {
-    {% for hub in Hubs -%}
+{% for hub in Hubs -%}
 {{ hub }}
-    {% endfor -%}
+{% endfor -%}
 }

@@ -9,6 +9,7 @@
     <Owners>Rico Suter</Owners>
     <Authors>Rico Suter</Authors>
     <Version>0.2.1</Version>
+    <Description>Specification and code generator for SignalR Core.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>

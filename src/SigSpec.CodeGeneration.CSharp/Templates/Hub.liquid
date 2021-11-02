@@ -12,6 +12,15 @@
 {%     endif -%}
 {% endfor -%}
     }
+
+    public interface I{{ Name }}ClientMethods
+    {
+{% for operation in Callbacks -%}
+        public Task On{{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+
+{% endfor -%}
+    }
+
     public class {{ Name }}HubClient: I{{ Name }}HubClient
     {
         private readonly HubConnection _connection;
@@ -19,6 +28,13 @@
         public {{Name}}HubClient(HubConnection connection)
         {
             _connection = connection;
+        }
+
+        public void RegisterAll(I{{ Name }}ClientMethods client)
+        {
+{% for operation in Callbacks -%}
+            RegisterFor{{ operation.Name }}(client.On{{ operation.Name }});
+{% endfor -%}
         }
 
 {% for operation in Operations -%}
@@ -39,23 +55,12 @@
 {%     endif -%}
 {% endfor -%}
 {% for operation in Callbacks -%}
-        public delegate Task On{{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
     {% if operation.Parameters.size == 0 %}
-        public IDisposable RegisterFor{{ operation.Name }}(On{{ operation.Name }} callback)
-        {
-            return _connection.On("{{ operation.Name }}", callback.Invoke);
-        }
-
         public IDisposable RegisterFor{{ operation.Name }}(Func<Task> callback)
         {
             return _connection.On("{{ operation.Name }}", callback);
         }
     {% else %}
-        public IDisposable RegisterFor{{ operation.Name }}(On{{ operation.Name }} callback)
-        {
-            return _connection.On<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}>("{{ operation.Name }}", callback.Invoke);
-        }
-
         public IDisposable RegisterFor{{ operation.Name }}(Func<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}, Task> callback)
         {
             return _connection.On("{{ operation.Name }}", callback);
