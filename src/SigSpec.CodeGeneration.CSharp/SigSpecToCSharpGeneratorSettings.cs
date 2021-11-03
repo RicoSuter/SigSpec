@@ -5,8 +5,6 @@ namespace SigSpec.CodeGeneration.CSharp
 {
     public class SigSpecToCSharpGeneratorSettings : SigSpecToCSharpGeneratorSettingsBase
     {
-        public bool GenerateInterface { get; set; } = false;
-
         public SigSpecToCSharpGeneratorSettings()
             : base(new CSharpGeneratorSettings())
         {

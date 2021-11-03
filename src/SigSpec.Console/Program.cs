@@ -32,7 +32,6 @@ namespace SigSpec
             Console.ReadKey();
 
             var codeGeneratorSettings = new SigSpecToCSharpGeneratorSettings();
-            codeGeneratorSettings.GenerateInterface = true;
             var codeGenerator = new SigSpecToCSharpGenerator(codeGeneratorSettings);
             var file = codeGenerator.GenerateClients(document);
 
