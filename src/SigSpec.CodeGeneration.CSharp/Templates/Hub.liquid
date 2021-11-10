@@ -1,0 +1,81 @@
+﻿    public interface I{{ Name }}HubClient
+    {
+{% for operation in Operations -%}
+{%     if operation.IsObservable -%}
+    {% comment %}For the moment don't handle streams{% endcomment %}
+{%     elseif operation.HasReturnType -%}
+        public Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken));
+
+{%     else -%}
+        public Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken));
+
+{%     endif -%}
+{% endfor -%}
+    }
+
+    public interface I{{ Name }}ClientMethods
+    {
+{% for operation in Callbacks -%}
+        public Task On{{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}{% if forloop.last == false %}, {% endif %}{% endfor %});
+
+{% endfor -%}
+    }
+
+    public class {{ Name }}HubClient: I{{ Name }}HubClient
+    {
+        private readonly HubConnection _connection;
+
+        public {{Name}}HubClient(HubConnection connection)
+        {
+            _connection = connection;
+        }
+
+        public void RegisterAll(I{{ Name }}ClientMethods client)
+        {
+{% for operation in Callbacks -%}
+            RegisterFor{{ operation.Name }}(client.On{{ operation.Name }});
+{% endfor -%}
+        }
+
+        public void DeregisterAll(I{{ Name }}ClientMethods client)
+        {
+{% for operation in Callbacks -%}
+            DeregisterFor{{ operation.Name }}();
+{% endfor -%}
+        }
+
+{% for operation in Operations -%}
+{%     if operation.IsObservable -%}
+    {% comment %}For the moment don't handle streams{% endcomment %}
+{%     elseif operation.HasReturnType -%}
+        public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
+        {
+            return await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
+        }
+
+{%     else -%}
+        public async Task {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
+        {
+            await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
+        }
+
+{%     endif -%}
+{% endfor -%}
+{% for operation in Callbacks -%}
+{% if operation.Parameters.size == 0 %}
+        public IDisposable RegisterFor{{ operation.Name }}(Func<Task> callback)
+        {
+            return _connection.On("{{ operation.Name }}", callback);
+        }
+{% else %}
+        public IDisposable RegisterFor{{ operation.Name }}(Func<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}, Task> callback)
+        {
+            return _connection.On("{{ operation.Name }}", callback);
+        }
+{% endif %}
+        public void DeregisterFor{{ operation.Name }}()
+        {
+            _connection.Remove("{{ operation.Name }}");
+        }
+{% endfor -%}
+    }
