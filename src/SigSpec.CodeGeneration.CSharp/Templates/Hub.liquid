@@ -3,7 +3,7 @@
 {% for operation in Operations -%}
 {%     if operation.IsObservable -%}
     {% comment %}For the moment don't handle streams{% endcomment %}
-{%     elseif operation.HasReturnType -%}
+{%     elsif operation.HasReturnType -%}
         public Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken));
 
 {%     else -%}
@@ -47,7 +47,7 @@
 {% for operation in Operations -%}
 {%     if operation.IsObservable -%}
     {% comment %}For the moment don't handle streams{% endcomment %}
-{%     elseif operation.HasReturnType -%}
+{%     elsif operation.HasReturnType -%}
         public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
         {
             return await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
