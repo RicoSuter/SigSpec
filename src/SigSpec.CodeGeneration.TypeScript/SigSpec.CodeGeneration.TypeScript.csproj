@@ -14,11 +14,11 @@
     <PackageTags>SignalR Specification CodeGeneration TypeScript</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Templates\File.liquid" />
     <None Remove="Templates\Hub.liquid" />
+    <None Remove="Templates\HubFile.liquid" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\File.liquid" />
+    <EmbeddedResource Include="Templates\HubFile.liquid" />
     <EmbeddedResource Include="Templates\Hub.liquid" />
   </ItemGroup>
   <ItemGroup>

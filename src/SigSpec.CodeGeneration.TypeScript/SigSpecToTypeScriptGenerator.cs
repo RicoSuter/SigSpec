@@ -50,7 +50,7 @@ namespace SigSpec.CodeGeneration.TypeScript
             var artifacts = GenerateArtifacts(document);
 
             var fileModel = new FileModel(artifacts.Select(a => a.Code));
-            var fileTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "File", fileModel);
+            var fileTemplate = _settings.TypeScriptGeneratorSettings.TemplateFactory.CreateTemplate("TypeScript", "HubFile", fileModel);
 
             return fileTemplate.Render();
         }

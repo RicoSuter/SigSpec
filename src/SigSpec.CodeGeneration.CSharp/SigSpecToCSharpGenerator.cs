@@ -48,7 +48,7 @@ namespace SigSpec.CodeGeneration.CSharp
             var artifacts = GenerateArtifacts(document);
 
             var fileModel = new FileModel(artifacts.Select(a => a.Code), _settings.CSharpGeneratorSettings.Namespace);
-            var fileTemplate = _settings.CSharpGeneratorSettings.TemplateFactory.CreateTemplate("CSharp", "File", fileModel);
+            var fileTemplate = _settings.CSharpGeneratorSettings.TemplateFactory.CreateTemplate("CSharp", "HubFile", fileModel);
 
             return fileTemplate.Render();
         }
