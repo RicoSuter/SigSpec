@@ -14,7 +14,7 @@
     <PackageTags>SignalR Specification CodeGeneration</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration" Version="10.1.16" />
+    <PackageReference Include="NJsonSchema.CodeGeneration" Version="10.6.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />

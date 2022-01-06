@@ -28,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="njsonschema.codegeneration" Version="10.3.1" />
-    <PackageReference Include="njsonschema.codegeneration.csharp" Version="10.3.1" />
+    <PackageReference Include="njsonschema.codegeneration" Version="10.6.6" />
+    <PackageReference Include="njsonschema.codegeneration.csharp" Version="10.6.6" />
   </ItemGroup>
 
   <ItemGroup>
