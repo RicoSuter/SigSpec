@@ -21,7 +21,22 @@
 {% endfor -%}
     }
 
-    public class {{ Name }}HubClient: I{{ Name }}HubClient
+    public interface I{{ Name }}HubClientWithRegistration : I{{ Name }}HubClient
+    {
+        void RegisterAll(I{{ Name }}ClientMethods client);
+        void DeregisterAll(I{{ Name }}ClientMethods client);
+        
+{% for operation in Callbacks -%}
+{% if operation.Parameters.size == 0 %}
+        IDisposable RegisterFor{{ operation.Name }}(Func<Task> callback);
+{% else %}
+        IDisposable RegisterFor{{ operation.Name }}(Func<{% for parameter in operation.Parameters %}{{ parameter.Type }}{% if forloop.last == false %}, {% endif %}{% endfor %}, Task> callback);
+{% endif %}
+        void DeregisterFor{{ operation.Name }}();
+{% endfor -%}
+    }
+
+    public class {{ Name }}HubClient: I{{ Name }}HubClientWithRegistration
     {
         private readonly HubConnection _connection;
 
