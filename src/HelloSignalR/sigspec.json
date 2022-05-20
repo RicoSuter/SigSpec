@@ -1,0 +1,97 @@
+{
+  "sigspec": "1.0.0",
+  "info": {
+    "title": "SigSpec specification",
+    "version": "1.0.0"
+  },
+  "hubs": {
+    "/chat": {
+      "name": "Chat",
+      "description": "",
+      "operations": {
+        "Send": {
+          "description": "",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        },
+        "AddPerson": {
+          "description": "",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
+            }
+          }
+        },
+        "GetEvents": {
+          "description": "",
+          "parameters": {},
+          "returntype": {
+            "description": "",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/Event"
+              }
+            ]
+          },
+          "type": "Observable"
+        }
+      },
+      "callbacks": {
+        "Welcome": {
+          "description": "",
+          "parameters": {}
+        },
+        "Send": {
+          "description": "",
+          "parameters": {
+            "message": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Person": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "firstName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "lastName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}

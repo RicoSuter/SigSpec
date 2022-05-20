@@ -1,5 +1,7 @@
 ﻿using SigSpec.AspNetCore.Middlewares;
 using SigSpec.Core;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -19,15 +21,21 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>Gets the document name.</summary>
         public string DocumentName => _settings.DocumentName;
 
+        /// <summary>Gets the output path.</summary>
+        public string OutputPath => _settings.OutputPath;
+
+        public Action<SigSpecDocument> CommandLineAction => _settings.CommandLineAction;
+
+        public Dictionary<string, Type> Hubs => _settings.Hubs;
+
         /// <summary>
         /// Generates the document.
         /// </summary>
         /// <returns>The JSON.</returns>
-        public async Task<string> GenerateJsonAsync()
+        public async Task<SigSpecDocument> GenerateDocumentAsync()
         {
             var generator = new SigSpecGenerator(_settings);
-            var document = await generator.GenerateForHubsAsync(_settings.Hubs, _settings.Template);
-            return document.ToJson();
+            return await generator.GenerateForHubsAsync(_settings.Hubs, _settings.Template);
         }
     }
 }

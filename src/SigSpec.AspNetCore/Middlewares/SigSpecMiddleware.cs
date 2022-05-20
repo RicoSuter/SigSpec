@@ -46,8 +46,8 @@ namespace SigSpec.AspNetCore.Middlewares
             response.StatusCode = 200;
             response.ContentType = "application/json;charset=utf-8";
 
-            var json = await registration.GenerateJsonAsync(); 
-            await response.WriteAsync(json, new UTF8Encoding(false));
+            var document = await registration.GenerateDocumentAsync();
+            await response.WriteAsync(document.ToJson(), new UTF8Encoding(false));
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using NJsonSchema.CodeGeneration.TypeScript;
+using SigSpec.CodeGeneration.TypeScript;
+using System.IO;
 
 namespace HelloSignalR
 {
@@ -11,7 +14,26 @@ namespace HelloSignalR
             services.AddSignalR();
 
             // TODO: Automatically look hubs up
-            services.AddSigSpecDocument(o => o.Hubs["/chat"] = typeof(ChatHub));
+            services.AddSigSpecDocument(options =>
+            {
+                options.Hubs["/chat"] = typeof(ChatHub);
+
+                options.OutputPath = "sigspec.json";
+                options.CommandLineAction = document => // run cli with "donet run -- --sigspec""
+                {
+                    var generator = new SigSpecToTypeScriptGenerator(
+                        new SigSpecToTypeScriptGeneratorSettings
+                        {
+                            TypeScriptGeneratorSettings =
+                            {
+                                TypeStyle = TypeScriptTypeStyle.Interface
+                            }
+                        });
+
+                    var code = generator.GenerateFile(document);
+                    File.WriteAllText("signalr-api.ts", code);
+                };
+            });
 
             services.AddCors(c =>
             {
@@ -19,8 +41,7 @@ namespace HelloSignalR
                 {
                     policy.AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowAnyOrigin()
-                        .AllowCredentials();
+                        .AllowAnyOrigin();
                 });
             });
         }
@@ -33,10 +54,13 @@ namespace HelloSignalR
             app.UseSigSpec();
             app.UseSigSpecUi();
 
+            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ChatHub>("/chat");
+                endpoints.AddHubsFromSigSpec(app);
             });
+
+            app.HandleSigSpecCommandLine();
         }
     }
 }
