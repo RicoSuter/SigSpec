@@ -1,28 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-	</PropertyGroup>
-	<PropertyGroup>
-		<Owners>Rico Suter</Owners>
-		<Authors>Rico Suter</Authors>
-		<Description>Specification and code generator for SignalR Core.</Description>
-		<Version>0.3.0</Version>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>SignalR Specification CodeGeneration</PackageTags>
-	</PropertyGroup>
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Remove="SigSpecUi\index.html" />
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="SigSpecUi\index.html" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Owners>Rico Suter</Owners>
+    <Authors>Rico Suter</Authors>
+    <Description>Specification and code generator for SignalR Core.</Description>
+    <Version>0.3.1</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/RicoSuter/SigSpec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RicoSuter/SigSpec.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SignalR Specification CodeGeneration</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="SigSpecUi\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SigSpecUi\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SigSpec.Core\SigSpec.Core.csproj" />
+  </ItemGroup>
 </Project>
