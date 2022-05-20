@@ -74,7 +74,11 @@ namespace SigSpec.Core
         {
             return type.GetTypeInfo().GetRuntimeMethods().Where(m =>
             {
-                var returnsChannelReader = m.ReturnType.IsGenericType && (m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>) || m.ReturnType.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>));
+                var returnsChannelReader =
+                    m.ReturnType.IsGenericType &&
+                    (m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>) ||
+                     m.ReturnType.GetGenericTypeDefinition().IsAssignableToTypeName("IAsyncEnumerable`1", TypeNameStyle.Name));
+
                 return
                     m.IsPublic &&
                     m.IsSpecialName == false &&
@@ -90,7 +94,11 @@ namespace SigSpec.Core
         {
             return type.GetTypeInfo().GetRuntimeMethods().Where(m =>
             {
-                var returnsChannelReader = m.ReturnType.IsGenericType && (m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>) || m.ReturnType.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>));
+                var returnsChannelReader =
+                    m.ReturnType.IsGenericType &&
+                    (m.ReturnType.GetGenericTypeDefinition() == typeof(ChannelReader<>) ||
+                     m.ReturnType.GetGenericTypeDefinition().IsAssignableToTypeName("IAsyncEnumerable`1", TypeNameStyle.Name));
+
                 return
                     m.IsPublic &&
                     m.IsSpecialName == false &&
