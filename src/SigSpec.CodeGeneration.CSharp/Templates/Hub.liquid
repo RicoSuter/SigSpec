@@ -50,7 +50,7 @@
 {%     elsif operation.HasReturnType -%}
         public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
         {
-            return await _connection.InvokeAsync("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
+            return await _connection.InvokeAsync<{{ operation.ReturnType.Type }}>("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);
         }
 
 {%     else -%}
