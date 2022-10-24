@@ -16,7 +16,7 @@ Original idea: https://github.com/RSuter/NSwag/issues/691
 
 ## Sample
 
-Hub: 
+Hub:
 
 ```csharp
 public class ChatHub : Hub<IChatClient>
@@ -33,12 +33,14 @@ public class ChatHub : Hub<IChatClient>
 
     public Task AddPerson(Person person)
     {
+        Clients.Others.PersonAdded(person);
         return Task.CompletedTask;
     }
 
     public ChannelReader<Event> GetEvents()
     {
         var channel = Channel.CreateUnbounded<Event>();
+        // TODO: Write events
         return channel.Reader;
     }
 }
@@ -62,10 +64,12 @@ public interface IChatClient
     Task Welcome();
 
     Task Send(string message);
+
+    Task PersonAdded(Person person);
 }
 ```
 
-Generated spec: 
+Generated spec:
 
 ```json
 {
@@ -78,10 +82,7 @@ Generated spec:
           "description": "",
           "parameters": {
             "message": {
-              "type": [
-                "null",
-                "string"
-              ],
+              "type": "string",
               "description": ""
             }
           }
@@ -93,9 +94,6 @@ Generated spec:
               "description": "",
               "oneOf": [
                 {
-                  "type": "null"
-                },
-                {
                   "$ref": "#/definitions/Person"
                 }
               ]
@@ -106,11 +104,8 @@ Generated spec:
           "description": "",
           "parameters": {},
           "returntype": {
-            "description": "",
+            "description": "Provides a base class for reading from a channel.",
             "oneOf": [
-              {
-                "type": "null"
-              },
               {
                 "$ref": "#/definitions/Event"
               }
@@ -128,11 +123,21 @@ Generated spec:
           "description": "",
           "parameters": {
             "message": {
-              "type": [
-                "null",
-                "string"
-              ],
+              "type": "string",
               "description": ""
+            }
+          }
+        },
+        "PersonAdded": {
+          "description": "",
+          "parameters": {
+            "person": {
+              "description": "",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Person"
+                }
+              ]
             }
           }
         }
@@ -145,16 +150,10 @@ Generated spec:
       "additionalProperties": false,
       "properties": {
         "firstName": {
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": ["null", "string"]
         },
         "lastName": {
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": ["null", "string"]
         }
       }
     },
@@ -162,11 +161,8 @@ Generated spec:
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Type": {
-          "type": [
-            "null",
-            "string"
-          ]
+        "type": {
+          "type": ["null", "string"]
         }
       }
     }
@@ -174,50 +170,74 @@ Generated spec:
 }
 ```
 
-Generated TypeScript code: 
+Generated TypeScript code:
 
 ```typescript
-import { HubConnection, IStreamResult } from "@aspnet/signalr"
+import { HubConnection, IStreamResult } from "@microsoft/signalr";
 
 export class ChatHub {
-    constructor(private connection: HubConnection) {
-    }
+  constructor(private connection: HubConnection) {}
 
-    send(message: string): Promise<void> {
-        return this.connection.invoke('Send', message);
-    }
+  send(message: string): Promise<void> {
+    return this.connection.invoke("Send", message);
+  }
 
-    addPerson(person: Person): Promise<void> {
-        return this.connection.invoke('AddPerson', person);
-    }
+  addPerson(person: Person): Promise<void> {
+    return this.connection.invoke("AddPerson", person);
+  }
 
-    getEvents(): IStreamResult<Event> {
-        return this.connection.stream('GetEvents');
-    }
+  getEvents(): IStreamResult<Event> {
+    return this.connection.stream("GetEvents");
+  }
 
-    registerCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.on('Welcome', () => implementation.welcome());
-        this.connection.on('Send', (message) => implementation.send(message));
-    }
+  onWelcome(func: () => void): void {
+    this.connection.on("Welcome", func);
+  }
 
-    unregisterCallbacks(implementation: IChatHubCallbacks) {
-        this.connection.off('Welcome', () => implementation.welcome());
-        this.connection.off('Send', (message) => implementation.send(message));
-    }
+  unregisterWelcome(func: () => void): void {
+    this.connection.off("Welcome", func);
+  }
+  onSend(func: (message: string) => void): void {
+    this.connection.on("Send", func);
+  }
+
+  unregisterSend(func: (message: string) => void): void {
+    this.connection.off("Send", func);
+  }
+  onPersonAdded(func: (person: Person) => void): void {
+    this.connection.on("PersonAdded", func);
+  }
+
+  unregisterPersonAdded(func: (person: Person) => void): void {
+    this.connection.off("PersonAdded", func);
+  }
+
+  registerCallbacks(implementation: IChatHubCallbacks) {
+    this.connection.on("Welcome", () => implementation.welcome());
+    this.connection.on("Send", message => implementation.send(message));
+    this.connection.on("PersonAdded", person => implementation.personAdded(person));
+  }
+
+  unregisterCallbacks(implementation: IChatHubCallbacks) {
+    this.connection.off("Welcome", () => implementation.welcome());
+    this.connection.off("Send", message => implementation.send(message));
+    this.connection.off("PersonAdded", person => implementation.personAdded(person));
+  }
 }
 
 export interface IChatHubCallbacks {
-    welcome(): void;
-    send(message: string): void;
+  welcome(): void;
+  send(message: string): void;
+  personAdded(person: Person): void;
 }
 
 export interface Person {
-    firstName: string;
-    lastName: string;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 export interface Event {
-    Type: string;
+  type: string | null;
 }
 ```
 

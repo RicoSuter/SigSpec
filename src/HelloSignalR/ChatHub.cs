@@ -19,6 +19,7 @@ namespace HelloSignalR
 
         public Task AddPerson(Person person)
         {
+            Clients.Others.PersonAdded(person);
             return Task.CompletedTask;
         }
 
@@ -49,5 +50,7 @@ namespace HelloSignalR
         Task Welcome();
 
         Task Send(string message);
+
+        Task PersonAdded(Person person);
     }
 }
