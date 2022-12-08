@@ -15,7 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NJsonSchema" Version="10.7.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
   </ItemGroup>
 </Project>
