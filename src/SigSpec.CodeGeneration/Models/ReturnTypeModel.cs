@@ -13,9 +13,11 @@ namespace SigSpec.CodeGeneration.Models
             _parameter = parameter;
             _resolver = resolver;
 
+            Description = _parameter.Description;
             Type = _resolver.Resolve(_parameter.ActualTypeSchema, _parameter.IsNullable(SchemaType.JsonSchema), null);
         }
 
+        public string Description { get; }
         public string Type { get; }
     }
 }

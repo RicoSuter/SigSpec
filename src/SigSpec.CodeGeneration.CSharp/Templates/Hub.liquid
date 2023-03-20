@@ -45,9 +45,14 @@
         }
 
 {% for operation in Operations -%}
+        /// <summary>
+        /// {{operation.Description}}
+        /// </summary>{% for parameter in operation.Parameters %}
+        /// <param name="{{parameter.Name}}">{{parameter.Description}}</param>{% endfor %}
 {%     if operation.IsObservable -%}
     {% comment %}For the moment don't handle streams{% endcomment %}
 {%     elsif operation.HasReturnType -%}
+        /// <returns>{{operation.ReturnType.Description}}</returns>
         public async Task<{{ operation.ReturnType.Type }}> {{ operation.Name }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.Name }}, {% endfor %}CancellationToken token = default(CancellationToken))
         {
             return await _connection.InvokeAsync<{{ operation.ReturnType.Type }}>("{{ operation.Name }}"{% for parameter in operation.Parameters %}, {{ parameter.Name }}{% endfor %}, token);

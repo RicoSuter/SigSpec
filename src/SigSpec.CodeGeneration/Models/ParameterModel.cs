@@ -10,7 +10,10 @@ namespace SigSpec.CodeGeneration.Models
         {
             Name = name;
             Type = resolver.Resolve(parameter.ActualTypeSchema, parameter.IsNullable(SchemaType.JsonSchema), Name);
+            Description = parameter.Description;
         }
+
+        public string Description { get; }
 
         public string Name { get; }
 
