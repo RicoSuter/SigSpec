@@ -56,12 +56,7 @@ namespace SigSpec
 
             var document = generator.GenerateForHubsAsync(new Dictionary<string, Type>(hubs.Select(t => new KeyValuePair<string, Type>(t.Name, t)))).Result;
 
-            string? pathXml = Namotion.Reflection.XmlDocsExtensions.GetXmlDocsPath(targetAss, true);
-
             Directory.SetCurrentDirectory(currentDir);
-            
-            
-            Console.WriteLine(pathXml);
             
             
             //On va chercher RSimplified et on retire les champs qui ne sont pas pertinent.
