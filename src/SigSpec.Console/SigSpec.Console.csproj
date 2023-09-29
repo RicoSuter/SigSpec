@@ -14,4 +14,22 @@
     <ProjectReference Include="..\SigSpec.CodeGeneration.TypeScript\SigSpec.CodeGeneration.TypeScript.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.SignalR">
+      <HintPath>..\..\res\Microsoft.AspNetCore.SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Common">
+      <HintPath>..\..\res\Microsoft.AspNetCore.SignalR.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Core">
+      <HintPath>..\..\res\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Protocols.Json">
+      <HintPath>..\..\res\Microsoft.AspNetCore.SignalR.Protocols.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack">
+      <HintPath>..\..\res\Microsoft.AspNetCore.SignalR.Protocols.MessagePack.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SigSpec.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "sigspec \r\n-a RaycoWylie.Communication.SuperDoer.Server \r\n-j D:\\workingdir\\newgen\\code\\git\\superdoer\\SuperDoer\\protocol/SuperDoerClient.json \r\n-c D:\\workingdir\\newgen\\code\\git\\superdoer\\SuperDoer\\protocol/SuperDoerClient.cs \r\n--namespace SuperDoer.Test.Client D:\\workingdir\\newgen\\code\\git\\superdoer\\SuperDoer\\SuperDoer\\bin\\Debug\\net6.0\\/RaycoWylie.Communication.SuperDoer.Server.dll",
+      "workingDirectory": "D:\\workingdir\\newgen\\code\\git\\demo-comansa\\Protocol"
+    }
+  }
+}
