@@ -14,8 +14,9 @@
     <PackageTags>SignalR Specification CodeGeneration</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NJsonSchema" Version="10.7.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NJsonSchema" Version="11.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
   </ItemGroup>
 </Project>
