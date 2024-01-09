@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Generation;
 
 namespace SigSpec.Core
 {
-    public class SigSpecGeneratorSettings : JsonSchemaGeneratorSettings
+    public class SigSpecGeneratorSettings : NewtonsoftJsonSchemaGeneratorSettings
     {
         public SigSpecGeneratorSettings()
         {

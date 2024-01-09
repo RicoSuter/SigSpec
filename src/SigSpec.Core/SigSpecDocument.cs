@@ -2,9 +2,9 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema;
-using NJsonSchema.Converters;
 using System;
 using System.Collections.Generic;
+using NJsonSchema.NewtonsoftJson.Converters;
 
 namespace SigSpec.Core
 {
